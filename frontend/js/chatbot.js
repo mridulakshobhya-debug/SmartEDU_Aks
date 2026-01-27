@@ -1,15 +1,15 @@
-// chatbot.js - AI Chatbot Logic
+// chatbot.js - AI Chatbot Logic with Table Support
 async function ask() {
   const age = document.getElementById('age').value;
   const interest = document.getElementById('interest').value;
   const output = document.getElementById('out');
   
   if (!age || !interest) {
-    output.textContent = 'Please fill in both age and interest fields.';
+    output.innerHTML = '<p style="color: var(--error);">Please fill in both age and interest fields.</p>';
     return;
   }
   
-  output.textContent = 'Loading recommendations...';
+  output.innerHTML = '<div class="loading">Loading recommendations</div>';
   
   try {
     const response = await fetch('/api/chatbot', {
@@ -25,14 +25,39 @@ async function ask() {
     
     const data = await response.json();
     
-    output.textContent = typeof data.reply === 'string'
-      ? data.reply
-      : JSON.stringify(data.reply, null, 2);
+    // Render the response, supporting HTML tables
+    if (data.reply) {
+      output.innerHTML = formatResponse(data.reply);
+    } else {
+      output.innerHTML = '<p>No recommendations found. Please try again.</p>';
+    }
       
   } catch (error) {
     console.error('Error:', error);
-    output.textContent = 'Error fetching recommendations. Please try again.';
+    output.innerHTML = '<p style="color: var(--error);">Error fetching recommendations. Please try again.</p>';
   }
+}
+
+// Format response, supporting HTML tables
+function formatResponse(reply) {
+  // If reply contains HTML table markers, render as HTML
+  if (typeof reply === 'string' && reply.includes('<table')) {
+    return reply;
+  }
+  
+  // Otherwise, escape and wrap in paragraph
+  if (typeof reply === 'string') {
+    return `<p>${escapeHtml(reply).replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`;
+  }
+  
+  return `<pre>${JSON.stringify(reply, null, 2)}</pre>`;
+}
+
+// Escape HTML special characters
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // Allow Enter key to trigger recommendations

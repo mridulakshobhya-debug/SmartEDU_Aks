@@ -98,7 +98,7 @@ function renderCourses(lessons) {
 function filterCourses() {
   const searchTerm = document.getElementById('searchInput').value.toLowerCase();
   const subjectFilter = document.getElementById('subjectFilter').value;
-  const difficultyFilter = document.getElementById('difficultyFilter').value;
+  const difficultyFilter = document.getElementById('difficultyFilter').value.toLowerCase();
   
   let filtered = allLessons.filter(lesson => {
     const matchesSearch = 
@@ -106,7 +106,7 @@ function filterCourses() {
       lesson.description.toLowerCase().includes(searchTerm);
     
     const matchesSubject = !subjectFilter || lesson.subject === subjectFilter;
-    const matchesDifficulty = !difficultyFilter || lesson.difficulty === difficultyFilter;
+    const matchesDifficulty = !difficultyFilter || lesson.difficulty.toLowerCase() === difficultyFilter;
     
     return matchesSearch && matchesSubject && matchesDifficulty;
   });

@@ -1,0 +1,71 @@
+/* File Upload Styles */
+.file-upload-wrapper {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: transparent;
+  animation: slideInUp 0.5s ease-out;
+}
+
+.file-upload-wrapper:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+}
+
+.file-upload-wrapper input {
+  display: none;
+}
+
+.file-upload-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.file-upload-wrapper:hover .file-upload-label {
+  color: var(--primary);
+  animation: float 1.5s ease-in-out infinite;
+}
+
+#fileInfo {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  animation: fadeInUp 0.5s ease-out;
+  transition: all var(--transition-fast);
+}
+
+/* Performance Section Styles */
+#performanceSection {
+  animation: slideInDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-color: var(--primary);
+}
+
+#performanceSection h4 {
+  animation: fadeInDown 0.6s ease-out;
+}
+
+#scoreDisplay {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  font-size: 1.3rem;
+  animation: gradientWave 0.6s ease;
+}
+
+@media (max-width: 768px) {
+  .file-upload-wrapper {
+    padding: 1.5rem;
+  }
+  
+  #performanceSection {
+    grid-template-columns: 1fr;
+  }
+}

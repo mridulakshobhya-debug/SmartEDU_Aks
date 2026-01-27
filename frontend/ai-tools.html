@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Tools - SmartEDU</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/ai-tools.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-wrapper">
+        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU</h1>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="elearning.html">eLearning</a>
+          <a href="ai-tools.html" style="color: var(--primary); font-weight: 600;">AI Tools</a>
+          <a href="chatbot.html">AI Chatbot</a>
+          <a href="login.html" style="color: var(--primary); font-weight: 600;">Login</a>
+          <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Sign Up</a>
+        </nav>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section" style="padding: 3rem 1rem; min-height: 400px;">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 style="color: white; font-size: 3rem; margin-bottom: 1rem;">🤖 AI Tools</h1>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; max-width: 600px;">
+          Leverage the power of AI to enhance your learning experience with intelligent tools
+        </p>
+      </div>
+    </section>
+
+    <div class="container" style="padding: 3rem 1rem;">
+      <!-- Tools Grid -->
+      <div class="grid grid-2" style="margin-bottom: 3rem;">
+        <!-- Worksheet Generator Card -->
+        <div class="card tool-card" style="cursor: pointer;" onclick="switchTab('generator')">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+          <h2>Worksheet Generator</h2>
+          <p>Generate custom worksheets for different subjects with adjustable difficulty levels.</p>
+          <div style="color: var(--primary); font-weight: 600; margin-top: 1rem;">
+            Get Started →
+          </div>
+        </div>
+
+        <!-- Analyzer Card -->
+        <div class="card tool-card" style="cursor: pointer;" onclick="switchTab('analyzer')">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+          <h2>Content Analyzer</h2>
+          <p>Analyze and understand complex educational content with AI-powered insights.</p>
+          <div style="color: var(--primary); font-weight: 600; margin-top: 1rem;">
+            Get Started →
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-container">
+        <!-- Generator Tab -->
+        <div id="generator-tab" class="tab-content active">
+          <div class="card">
+            <h2 style="margin-top: 0;">📝 Worksheet Generator</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">
+              Create custom worksheets tailored to your learning needs
+            </p>
+
+            <form id="worksheetForm">
+              <div class="form-group">
+                <label for="subject">Subject *</label>
+                <select id="subject" required>
+                  <option value="">Select a subject...</option>
+                  <option value="English">English / Literature</option>
+                  <option value="Science">Science</option>
+                  <option value="Social Studies">Social Studies</option>
+                  <option value="Computer Science">Computer Science</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="difficulty">Difficulty Level *</label>
+                <select id="difficulty" required>
+                  <option value="">Select difficulty...</option>
+                  <option value="Beginner">🟢 Beginner</option>
+                  <option value="Intermediate">🟡 Intermediate</option>
+                  <option value="Advanced">🔴 Advanced</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="topic">Topic (Optional)</label>
+                <input 
+                  type="text" 
+                  id="topic" 
+                  placeholder="e.g., Photosynthesis, World War 2, Python Loops"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="numQuestions">Number of Questions *</label>
+                <input 
+                  type="number" 
+                  id="numQuestions" 
+                  min="1" 
+                  max="50" 
+                  value="10"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="questionType">Question Type *</label>
+                <select id="questionType" required>
+                  <option value="">Select type...</option>
+                  <option value="Multiple Choice">Multiple Choice</option>
+                  <option value="Short Answer">Short Answer</option>
+                  <option value="Essay">Essay Questions</option>
+                  <option value="Mixed">Mixed Types</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-large" style="width: 100%; margin-top: 1rem;">
+                ✨ Generate Worksheet
+              </button>
+            </form>
+
+            <!-- Loading State -->
+            <div id="loadingState" style="display: none; text-align: center; padding: 2rem;">
+              <div class="spinner"></div>
+              <p style="margin-top: 1rem; color: var(--text-secondary);">Generating your worksheet...</p>
+            </div>
+
+            <!-- Output Area -->
+            <div id="outputArea" style="display: none; margin-top: 2rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0;">Your Generated Worksheet</h3>
+                <button onclick="downloadWorksheet()" class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                  📥 Download
+                </button>
+              </div>
+              <div id="worksheetContent" class="worksheet-preview" style="
+                background: var(--bg-secondary);
+                padding: 2rem;
+                border-radius: var(--radius-lg);
+                border: 2px solid var(--border);
+                max-height: 600px;
+                overflow-y: auto;
+              "></div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" style="display: none; margin-top: 2rem;">
+              <div class="alert alert-error">
+                <h4 style="margin-top: 0;">⚠️ Error Generating Worksheet</h4>
+                <p id="errorMessage" style="margin-bottom: 0;"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analyzer Tab -->
+        <div id="analyzer-tab" class="tab-content">
+          <div class="card">
+            <h2 style="margin-top: 0;">🔍 Content Analyzer</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">
+              Get AI-powered analysis of educational content
+            </p>
+
+            <form id="analyzerForm">
+              <div class="form-group">
+                <label for="analysisType">Analysis Type *</label>
+                <select id="analysisType" required>
+                  <option value="">Select analysis type...</option>
+                  <option value="summary">📌 Summarize Content</option>
+                  <option value="explain">💡 Explain Concept</option>
+                  <option value="keypoints">📋 Extract Key Points</option>
+                  <option value="questions">❓ Generate Study Questions</option>
+                  <option value="assessment">📊 Assess Test Performance</option>
+                </select>
+              </div>
+
+              <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 2px dashed var(--border);">
+                <h4 style="margin-top: 0; color: var(--primary);">Content Source</h4>
+                
+                <!-- File Upload Section -->
+                <div class="form-group">
+                  <label for="contentFile">Upload File (PDF, DOCX, TXT)</label>
+                  <div class="file-upload-wrapper">
+                    <input 
+                      type="file" 
+                      id="contentFile"
+                      accept=".pdf,.docx,.doc,.txt"
+                    />
+                    <div class="file-upload-label">
+                      📁 Click to upload or drag & drop
+                      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+                        Supported: PDF, DOCX, TXT
+                      </p>
+                    </div>
+                  </div>
+                  <p id="fileInfo" style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;"></p>
+                </div>
+
+                <!-- OR Divider -->
+                <div style="text-align: center; margin: 1.5rem 0; color: var(--text-muted); font-weight: 600;">
+                  OR
+                </div>
+
+                <!-- Text Input Section -->
+                <div class="form-group">
+                  <label for="contentInput">Paste Content Directly</label>
+                  <textarea 
+                    id="contentInput" 
+                    rows="8"
+                    placeholder="Paste or type the content you want to analyze..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Questions Performance Section (conditional) -->
+              <div id="performanceSection" style="display: none; background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 2px solid var(--primary);">
+                <h4 style="margin-top: 0; color: var(--primary);">📊 Test Performance (Optional)</h4>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+                  If this is a test/quiz, tell us your performance to get detailed feedback
+                </p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group">
+                    <label for="questionsAnswered">Questions Answered</label>
+                    <input 
+                      type="number" 
+                      id="questionsAnswered"
+                      min="0"
+                      placeholder="e.g., 8"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="totalQuestions">Total Questions</label>
+                    <input 
+                      type="number" 
+                      id="totalQuestions"
+                      min="1"
+                      placeholder="e.g., 10"
+                    />
+                  </div>
+                </div>
+
+                <div style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; border-left: 4px solid var(--primary);">
+                  <p style="margin: 0; color: var(--primary-dark); font-weight: 600;">
+                    📈 Score: <span id="scoreDisplay">0%</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="analysisLevel">Analysis Detail Level *</label>
+                <select id="analysisLevel" required>
+                  <option value="Brief">Brief</option>
+                  <option value="Detailed" selected>Detailed</option>
+                  <option value="Comprehensive">Comprehensive</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-large" style="width: 100%; margin-top: 1rem;">
+                🔍 Analyze Content
+              </button>
+            </form>
+
+            <!-- Loading State -->
+            <div id="analyzerLoadingState" style="display: none; text-align: center; padding: 2rem;">
+              <div class="spinner"></div>
+              <p style="margin-top: 1rem; color: var(--text-secondary);">Analyzing content...</p>
+            </div>
+
+            <!-- Output Area -->
+            <div id="analyzerOutputArea" style="display: none; margin-top: 2rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0;">Analysis Results</h3>
+                <button onclick="copyAnalysis()" class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                  📋 Copy
+                </button>
+              </div>
+              <div id="analysisContent" class="analysis-preview" style="
+                background: var(--bg-secondary);
+                padding: 2rem;
+                border-radius: var(--radius-lg);
+                border: 2px solid var(--border);
+                max-height: 600px;
+                overflow-y: auto;
+                line-height: 1.6;
+              "></div>
+            </div>
+
+            <!-- Error State -->
+            <div id="analyzerErrorState" style="display: none; margin-top: 2rem;">
+              <div class="alert alert-error">
+                <h4 style="margin-top: 0;">⚠️ Error During Analysis</h4>
+                <p id="analyzerErrorMessage" style="margin-bottom: 0;"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: var(--bg-secondary); padding: 2rem 1rem; text-align: center; margin-top: 4rem; border-top: 1px solid var(--border);">
+    <div class="container">
+      <p style="color: var(--text-muted); margin-bottom: 0.5rem;">
+        © 2026 SmartEDU. All rights reserved.
+      </p>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+        Powered by AI | Safe & Secure Learning
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/ai-tools.js"></script>
+</body>
+</html>

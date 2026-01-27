@@ -148,6 +148,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
+ * Navbar Scroll Effect - Premium Look
+ * Adds shadow and styling when user scrolls
+ */
+function initNavbarScrollEffect() {
+  const navbar = document.querySelector('header');
+  if (!navbar) return;
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+  
+  console.log('✅ Navbar Scroll Effect Initialized');
+}
+
+/**
  * Performance monitoring (optional)
  */
 if (window.performance && window.performance.timing) {
@@ -157,3 +176,8 @@ if (window.performance && window.performance.timing) {
     console.log('📊 Page Load Time:', pageLoadTime + 'ms');
   });
 }
+
+// Initialize navbar scroll effect when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  initNavbarScrollEffect();
+});

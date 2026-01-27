@@ -12,6 +12,7 @@ from routes.book_routes import bp as book_bp
 from routes.lesson_routes import bp as lesson_bp
 from routes.chatbot_routes import bp as chatbot_bp
 from routes.auth import bp as auth_bp
+from routes.ai_tools_routes import bp as ai_tools_bp
 
 
 def create_app(config_name=None):
@@ -38,6 +39,7 @@ def create_app(config_name=None):
     app.register_blueprint(book_bp, url_prefix="/api")
     app.register_blueprint(lesson_bp, url_prefix="/api")
     app.register_blueprint(chatbot_bp, url_prefix="/api")
+    app.register_blueprint(ai_tools_bp, url_prefix="/api")
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     
     # Routes
@@ -49,19 +51,9 @@ def create_app(config_name=None):
     def elearning():
         return send_file("../frontend/elearning.html")
     
-    @app.route("/chatbot.html")
-    def chatbot():
-        return send_file("../frontend/chatbot.html")
-    
-    @app.route("/login.html")
-    def login():
-        return send_file("../frontend/login.html")
-    
-    @app.route("/signup.html")
-    def signup():
-        return send_file("../frontend/signup.html")
-    
-    @app.errorhandler(404)
+    @app.route("/ai-tools.html")
+    def ai_tools():
+        return send_file("../frontend/ai-tools.html")
     def not_found(error):
         return {"error": "Route not found"}, 404
     

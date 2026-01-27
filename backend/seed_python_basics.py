@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
-Seed Python Basics: Variables and Data Types course with 10 lessons
+Seed Python Basics: Full Course Content for Beginners (8 Lessons)
 """
 import json
 from app import create_app, db
 from models.lesson import Lesson
 
 def seed_python_basics_course():
-    """Add Python Basics course with 10 lessons"""
+    """Add Python Basics course with 8 comprehensive lessons"""
     
     app = create_app()
     with app.app_context():
@@ -18,173 +18,288 @@ def seed_python_basics_course():
         lessons_data = [
             {
                 "title": "Lesson 1: What is a Variable?",
-                "description": "Learn what variables are and how Python stores data",
+                "description": "Learn what variables are and how to create them",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 15,
+                "video_url": "https://www.youtube.com/watch?v=ZDa-Z5JzLYM",
                 "content": """
-# What is a Variable?
+# Lesson 1: What is a Variable?
 
-Think of a variable as a labeled box that stores something.
+## Understanding Variables
+A variable is a container for storing data values. Think of it like a labeled box where you store information.
 
-**Box name → Value inside**
-
-## Python Example
+## Creating Variables
 ```python
+# Syntax: variable_name = value
 age = 15
+name = "Akshu"
+price = 99.99
+is_student = True
 ```
 
-- `age` → variable name
-- `=` → assignment operator
-- `15` → value stored
+## Variable Naming Rules
+✅ **Valid names:**
+- Must start with a letter or underscore
+- Can contain letters, numbers, and underscores
+- Case-sensitive (age ≠ Age)
+- Use meaningful names
 
-## Rules for Variable Names
+❌ **Invalid names:**
+- Cannot start with a number (1age)
+- Cannot contain spaces
+- Cannot contain special characters (@, $, %)
+- Cannot use Python keywords
 
-✅ **Allowed:**
-- letters, numbers, underscore
-- must start with a letter or underscore
-
-❌ **Not Allowed:**
-- starting with a number
-- spaces
-- special symbols (@, $, %)
-
-## Valid Examples:
+## Examples
 ```python
-name = "Akshu"
+# Valid
 user_age = 20
 _total = 100
+age_1 = 25
+
+# Invalid
+1age = 20  # Error: starts with number
+class = 10  # Error: 'class' is a keyword
+user-age = 20  # Error: hyphen not allowed
 ```
                 """,
                 "information": [
-                    "Variables are containers for storing data values",
+                    "A variable stores data in memory",
+                    "Variables are created using the = operator",
                     "Variable names must start with a letter or underscore",
-                    "Python is case-sensitive: age ≠ Age",
-                    "Use meaningful variable names for better code readability"
+                    "Python is case-sensitive: age and Age are different",
+                    "Use descriptive variable names for readability"
                 ],
                 "steps": [
-                    "Understand what variables are",
-                    "Learn variable naming rules",
-                    "Create your first variable",
-                    "Practice with multiple variables"
+                    "Understand what a variable is (a container for data)",
+                    "Learn rules for naming variables",
+                    "Assign values using =",
+                    "Print variables using print()",
+                    "Change variable values and observe output"
                 ],
                 "quiz": [
                     {
-                        "question": "What does the '=' symbol do in Python?",
-                        "options": ["Equals comparison", "Assignment operator", "Less than"],
+                        "question": "What is a variable?",
+                        "options": ["A mathematical formula", "A container for data", "A Python function"],
                         "correct": 1
                     },
                     {
-                        "question": "Can a variable name start with a number?",
-                        "options": ["Yes", "No", "Sometimes"],
+                        "question": "Which is a valid variable name?",
+                        "options": ["1age", "age_1", "class"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "What does x = 5 mean?",
+                        "options": ["x equals 5", "Assigns value 5 to variable x", "Compares x and 5"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "How do you display a variable?",
+                        "options": ["show(x)", "print(x)", "display(x)"],
                         "correct": 1
                     }
                 ]
             },
             {
                 "title": "Lesson 2: Python Data Types (Introduction)",
-                "description": "Explore the main data types in Python",
+                "description": "Learn about the main data types in Python",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 20,
+                "video_url": "https://www.youtube.com/watch?v=khKv-8q7YmY",
                 "content": """
-# Python Data Types (Introduction)
+# Lesson 2: Python Data Types (Introduction)
 
-Python needs to know what kind of data it is working with.
+## What are Data Types?
+Data types tell Python what kind of information a variable contains and what operations can be performed on it.
 
-## Main Built-in Data Types (Basics)
+## The Four Main Data Types
 
-| Data Type | Example | Meaning |
-|-----------|---------|---------|
-| int | 10 | Whole numbers |
-| float | 3.14 | Decimal numbers |
-| str | "Hello" | Text |
-| bool | True / False | Yes / No |
+### int (Integer)
+Whole numbers without decimals.
+```python
+age = 25
+score = -10
+count = 0
+```
 
-Each data type has its own characteristics and operations you can perform on it.
+### float (Floating Point)
+Numbers with decimal points.
+```python
+height = 5.9
+price = 19.99
+temperature = -2.5
+```
+
+### str (String)
+Text data enclosed in quotes.
+```python
+name = "Alice"
+message = 'Hello World'
+city = "New York"
+```
+
+### bool (Boolean)
+Logical values: True or False.
+```python
+is_student = True
+is_adult = False
+has_license = True
+```
+
+## Checking Data Types
+Use the type() function to check data types:
+```python
+print(type(25))       # <class 'int'>
+print(type(3.14))     # <class 'float'>
+print(type("Hello"))  # <class 'str'>
+print(type(True))     # <class 'bool'>
+```
                 """,
                 "information": [
-                    "Python has multiple data types for different kinds of data",
                     "int: whole numbers without decimals",
                     "float: numbers with decimal points",
-                    "str: text enclosed in quotes",
-                    "bool: True or False values"
+                    "str: text enclosed in quotes (single or double)",
+                    "bool: True or False values",
+                    "Use type() function to check data types"
                 ],
                 "steps": [
-                    "Learn about int type",
-                    "Learn about float type",
-                    "Learn about str type",
-                    "Learn about bool type"
+                    "Learn what data types are",
+                    "Understand common types: int, float, str, bool",
+                    "Create examples of each type",
+                    "Use type() to check data types",
+                    "Mix data types in simple programs"
                 ],
                 "quiz": [
                     {
-                        "question": "Which data type would you use for the text 'Hello'?",
-                        "options": ["int", "float", "str"],
+                        "question": "Name any four Python data types.",
+                        "options": ["int, float, str, bool", "int, text, number, logic", "list, tuple, set, dict"],
+                        "correct": 0
+                    },
+                    {
+                        "question": "What type is 'Hello'?",
+                        "options": ["int", "str", "bool"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "What type is True?",
+                        "options": ["str", "int", "bool"],
                         "correct": 2
                     },
                     {
-                        "question": "What data type is 3.14?",
-                        "options": ["int", "float", "str"],
+                        "question": "What does type() do?",
+                        "options": ["Creates a variable", "Shows the data type of a value", "Converts data types"],
                         "correct": 1
                     }
                 ]
             },
             {
                 "title": "Lesson 3: Integer (int)",
-                "description": "Master working with whole numbers",
+                "description": "Work with whole numbers and integer operations",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 20,
+                "video_url": "https://www.youtube.com/watch?v=H2EJuAcrZYU",
                 "content": """
-# Integer (int)
+# Lesson 3: Integer (int)
 
-## Definition
-Whole numbers (no decimals).
+## What is an Integer?
+An integer is a whole number (positive, negative, or zero) without a decimal point.
 
 ```python
-score = 95
-temperature = -5
+age = 25
+temperature = -10
+population = 1000000
+balance = 0
 ```
 
-## Operations
+## Integer Arithmetic Operations
+
+### Addition (+)
 ```python
-a = 10
-b = 3
-
-print(a + b)   # Addition: 13
-print(a - b)   # Subtraction: 7
-print(a * b)   # Multiplication: 30
-print(a // b)  # Division (integer result): 3
+sum = 10 + 5  # Result: 15
 ```
 
-## Key Points:
-- Integers can be positive or negative
-- No decimal point
-- Supports basic arithmetic operations
+### Subtraction (-)
+```python
+difference = 10 - 3  # Result: 7
+```
+
+### Multiplication (*)
+```python
+product = 10 * 3  # Result: 30
+```
+
+### Division (/)
+```python
+division = 10 / 3  # Result: 3.333... (Note: returns float)
+```
+
+### Integer Division (//)
+Returns the whole number part, discarding decimals.
+```python
+quotient = 10 // 3  # Result: 3
+quotient = 15 // 4  # Result: 3
+quotient = 20 // 5  # Result: 4
+```
+
+### Modulo (%)
+Returns the remainder after division.
+```python
+remainder = 10 % 3  # Result: 1
+remainder = 15 % 4  # Result: 3
+remainder = 20 % 5  # Result: 0
+```
+
+## Converting Strings to Integers
+```python
+age_str = "25"
+age = int(age_str)  # Now it's 25 (integer)
+print(age + 5)      # Works! Result: 30
+```
                 """,
                 "information": [
-                    "Integers are whole numbers",
+                    "An integer is a whole number without decimals",
                     "Can be positive, negative, or zero",
-                    "Support arithmetic operations: +, -, *, //, %",
-                    "Use // for integer division (no decimals in result)"
+                    "+ for addition, - for subtraction, * for multiplication",
+                    "/ gives float result, // gives integer result",
+                    "% gives the remainder (modulo operator)",
+                    "Convert strings to integers using int()"
                 ],
                 "steps": [
-                    "Create integer variables",
-                    "Perform addition with integers",
-                    "Perform multiplication with integers",
-                    "Use integer division operator"
+                    "Learn what integers are",
+                    "Perform addition, subtraction, multiplication",
+                    "Understand division / vs //",
+                    "Use modulo %",
+                    "Convert strings to integers"
                 ],
                 "quiz": [
                     {
-                        "question": "What is 10 // 3 in Python?",
-                        "options": ["3.33", "3", "4"],
+                        "question": "What is an integer?",
+                        "options": ["A decimal number", "Whole numbers without decimals", "Text data"],
                         "correct": 1
+                    },
+                    {
+                        "question": "What is 10 // 3?",
+                        "options": ["3.333", "3", "4"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "Which operator gives remainder?",
+                        "options": ["/", "//", "%"],
+                        "correct": 2
+                    },
+                    {
+                        "question": "How to convert '25' to int?",
+                        "options": ["int('25')", "integer('25')", "to_int('25')"],
+                        "correct": 0
                     }
                 ]
             },
@@ -193,51 +308,98 @@ print(a // b)  # Division (integer result): 3
                 "description": "Work with decimal numbers",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 20,
+                "video_url": "https://www.youtube.com/watch?v=7t2alSnE2-I",
                 "content": """
-# Floating Point (float)
+# Lesson 4: Floating Point (float)
 
-## Definition
-Numbers with decimal points.
+## What is a Float?
+A float is a number with a decimal point. It can represent fractional values.
 
 ```python
-price = 99.99
-height = 5.8
+height = 5.9
+price = 19.99
+temperature = -2.5
+percentage = 95.5
+```
+
+## Float Arithmetic
+```python
+a = 10.5
+b = 3.2
+
+print(a + b)   # 13.7
+print(a - b)   # 7.3
+print(a * b)   # 33.6
+print(a / b)   # 3.28125
+print(a // b)  # 3.0 (still returns float)
 ```
 
 ## Mixing int and float
+When you mix integers and floats in operations, Python automatically converts to float.
+
 ```python
-x = 10
-y = 3.5
+x = 10        # int
+y = 3.5       # float
 
 result = x + y
 print(result)        # 13.5
 print(type(result))  # <class 'float'>
 ```
 
-## Key Points:
-- Can represent fractional values
-- More precise than integers
-- When int and float mix, result is float
+## Precision and Rounding
+```python
+pi = 3.141592653589793
+print(pi)              # 3.141592653589793
+print(round(pi, 2))    # 3.14
+print(round(pi, 4))    # 3.1416
+```
+
+## Converting Strings and Integers to Float
+```python
+price_str = "19.99"
+price = float(price_str)  # 19.99
+
+number = 10
+decimal = float(number)   # 10.0
+```
                 """,
                 "information": [
-                    "Floats represent decimal numbers",
+                    "A float is a number with a decimal point",
+                    "Used for measurements, prices, percentages",
                     "More memory than integers",
                     "Mixing int and float produces float",
-                    "Used for measurements, prices, etc."
+                    "Use round() function for precision",
+                    "Convert strings to float using float()"
                 ],
                 "steps": [
-                    "Create float variables",
+                    "Learn what decimal numbers are",
                     "Perform arithmetic with floats",
-                    "Mix integers and floats",
-                    "Observe type conversion"
+                    "Understand float precision",
+                    "Round decimal values",
+                    "Convert int to float"
                 ],
                 "quiz": [
                     {
-                        "question": "What is the type of 10 + 3.5?",
-                        "options": ["int", "float", "str"],
+                        "question": "What is a float?",
+                        "options": ["A whole number", "A decimal number", "Text data"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "What is 5 / 2?",
+                        "options": ["2", "2.0", "2.5"],
+                        "correct": 2
+                    },
+                    {
+                        "question": "How to round 3.456 to 2 decimals?",
+                        "options": ["round(3.456, 2)", "round(3.456)", "round(2, 3.456)"],
+                        "correct": 0
+                    },
+                    {
+                        "question": "Is 2.0 an int or float?",
+                        "options": ["int", "float", "both"],
                         "correct": 1
                     }
                 ]
@@ -247,59 +409,100 @@ print(type(result))  # <class 'float'>
                 "description": "Learn to work with text data",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 25,
+                "video_url": "https://www.youtube.com/watch?v=k9TUPpGqYTo",
                 "content": """
-# String (str)
+# Lesson 5: String (str)
 
-## Definition
-Text data inside quotes.
+## What is a String?
+A string is text data enclosed in quotes. You can use single or double quotes.
 
 ```python
-name = "Akshu"
-message = 'Welcome to Python'
+name = "Alice"
+message = 'Hello World'
+city = "New York"
+quote = "She said 'Hi'"
 ```
 
-## String Operations
+## String Concatenation
+Combine strings using the + operator:
 ```python
-first = "Hello"
-second = "World"
+first_name = "John"
+last_name = "Doe"
+full_name = first_name + " " + last_name
+print(full_name)  # John Doe
+```
 
-print(first + " " + second)  # Hello World
+## String Length
+Use len() to find the number of characters:
+```python
+text = "Python"
+print(len(text))  # 6
 ```
 
 ## Accessing Characters
+Use indexing (starting from 0) to get individual characters:
 ```python
 word = "Python"
-print(word[0])  # P
-print(word[3])  # h
-print(word[-1]) # n (last character)
+print(word[0])    # P
+print(word[1])    # y
+print(word[5])    # n
+print(word[-1])   # n (last character)
+print(word[-2])   # o (second from last)
 ```
 
-## Key Points:
-- Use single or double quotes
-- Can concatenate strings with +
-- Can access individual characters by index
-- Indexing starts at 0
+## String Methods
+```python
+text = "Hello World"
+print(text.upper())    # HELLO WORLD
+print(text.lower())    # hello world
+print(text.replace("World", "Python"))  # Hello Python
+```
+
+## F-Strings (Modern Way)
+```python
+name = "Alice"
+age = 25
+print(f"Name: {name}, Age: {age}")  # Name: Alice, Age: 25
+```
                 """,
                 "information": [
-                    "Strings are sequences of characters",
+                    "A string is text data enclosed in quotes",
                     "Can use single or double quotes",
-                    "Concatenate with + operator",
+                    "Concatenate strings with + operator",
+                    "Use len() to find string length",
                     "Access characters by index (0-based)",
-                    "Negative indexing works from end"
+                    "Use string methods like .upper(), .lower()",
+                    "F-strings allow embedding variables in text"
                 ],
                 "steps": [
-                    "Create string variables",
+                    "Learn what strings are",
+                    "Create strings using quotes",
                     "Concatenate strings",
-                    "Access characters by positive index",
-                    "Use negative indexing"
+                    "Use string methods",
+                    "Use f-strings"
                 ],
                 "quiz": [
                     {
-                        "question": "What is word[0] for 'Python'?",
-                        "options": ["y", "P", "o"],
+                        "question": "What is a string?",
+                        "options": ["A number", "Text data", "A variable"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "What is 'Hi' + 'There'?",
+                        "options": ["HiThere", "Hi There", "Error"],
+                        "correct": 0
+                    },
+                    {
+                        "question": "How to find string length?",
+                        "options": ["length(string)", "len(string)", "size(string)"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "What does .upper() do?",
+                        "options": ["Deletes text", "Converts to uppercase", "Counts characters"],
                         "correct": 1
                     }
                 ]
@@ -309,51 +512,116 @@ print(word[-1]) # n (last character)
                 "description": "Understand True and False values",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 15,
+                "video_url": "https://www.youtube.com/watch?v=VchuKL44s6E",
                 "content": """
-# Boolean (bool)
+# Lesson 6: Boolean (bool)
 
-## Definition
-Logical values:
-- True
-- False
+## What are Booleans?
+Booleans represent one of two values: True or False. They are used in logical operations and conditions.
 
 ```python
 is_student = True
 is_adult = False
+has_license = True
 ```
 
-## Comparison Example
+## Comparison Operators
+These operators return boolean values:
+
 ```python
 age = 15
-print(age > 18)   # False
-print(age == 15)  # True
-print(age < 13)   # False
+
+print(age > 18)    # False
+print(age < 18)    # True
+print(age == 15)   # True
+print(age != 10)   # True
+print(age >= 15)   # True
+print(age <= 20)   # True
 ```
 
-## Key Points:
-- Used in conditions and logic
-- Result of comparison operations
-- Essential for decision making in code
+## Logical Operators
+
+### and (Both must be True)
+```python
+age = 15
+has_id = True
+
+if age > 13 and has_id:
+    print("Can attend")  # This will print
+```
+
+### or (At least one must be True)
+```python
+has_car = False
+has_bike = True
+
+if has_car or has_bike:
+    print("Has transportation")  # This will print
+```
+
+### not (Reverses the value)
+```python
+is_raining = True
+print(not is_raining)  # False
+```
+
+## Comparison Examples
+```python
+# Equal to
+5 == 5     # True
+5 == 3     # False
+
+# Not equal to
+5 != 3     # True
+5 != 5     # False
+
+# Greater than / Less than
+10 > 5     # True
+3 < 2      # False
+
+# Greater or equal / Less or equal
+5 >= 5     # True
+3 <= 2     # False
+```
                 """,
                 "information": [
-                    "Booleans represent True or False",
+                    "Booleans are True or False values",
                     "Result of comparison operations",
                     "Used in conditional statements",
-                    "Essential for logical operations"
+                    "> means greater than, < means less than",
+                    "== means equal to, != means not equal",
+                    "and, or, not are logical operators",
+                    "Essential for decision making in code"
                 ],
                 "steps": [
-                    "Create boolean variables",
-                    "Use comparison operators",
-                    "Understand True/False results",
-                    "Apply in logical operations"
+                    "Learn True and False",
+                    "Compare values using operators",
+                    "Use logical operators",
+                    "Apply booleans in if statements",
+                    "Understand truthy and falsy values"
                 ],
                 "quiz": [
                     {
-                        "question": "What is the result of 15 > 18?",
-                        "options": ["True", "False", "Error"],
+                        "question": "What are boolean values?",
+                        "options": ["Numbers", "True and False", "Text"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "Result of 5 > 3?",
+                        "options": ["True", "False", "2"],
+                        "correct": 0
+                    },
+                    {
+                        "question": "Which operator means AND?",
+                        "options": ["or", "and", "&"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "Is 0 True or False?",
+                        "options": ["True", "False", "Both"],
                         "correct": 1
                     }
                 ]
@@ -363,13 +631,15 @@ print(age < 13)   # False
                 "description": "Use type() function to identify data types",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 15,
+                "video_url": "https://www.youtube.com/watch?v=OhK7i6U2k-4",
                 "content": """
-# Checking Data Types (type())
+# Lesson 7: Checking Data Types (type())
 
-Use `type()` to see what kind of data Python is storing.
+## The type() Function
+Use type() to identify what type of data a variable contains.
 
 ```python
 x = 10
@@ -383,34 +653,75 @@ print(type(z))  # <class 'str'>
 print(type(a))  # <class 'bool'>
 ```
 
-## Why Use type()?
-- Debug your code
-- Understand data being stored
-- Check if conversion is needed
-- Learn about Python's type system
+## Why is type() Useful?
+1. **Debugging** - Identify unexpected data types
+2. **Validation** - Check if data is in correct format
+3. **Understanding** - Learn about Python's type system
+4. **Error Prevention** - Catch type issues early
 
-## Key Points:
-- type() is a built-in function
-- Returns the class/type of the variable
-- Helpful for troubleshooting
+## Using type() in Programs
+```python
+user_input = input("Enter a number: ")
+print(f"Type of input: {type(user_input)}")  # <class 'str'>
+
+# If you need it as a number, convert it
+number = int(user_input)
+print(f"After conversion: {type(number)}")  # <class 'int'>
+```
+
+## isinstance() Function
+Another way to check types:
+```python
+x = 5
+print(isinstance(x, int))      # True
+print(isinstance(x, float))    # False
+print(isinstance(x, str))      # False
+```
+
+## Common Examples
+```python
+print(type(5))           # <class 'int'>
+print(type("5"))         # <class 'str'>
+print(type(5.0))         # <class 'float'>
+print(type(5 > 3))       # <class 'bool'>
+print(type([1, 2, 3]))   # <class 'list'>
+```
                 """,
                 "information": [
                     "type() function returns the data type",
+                    "Returns format: <class 'typename'>",
                     "Useful for debugging and verification",
-                    "Shows <class 'typename'>",
-                    "Helps identify type mismatches"
+                    "helps identify type mismatches",
+                    "isinstance() is another way to check types",
+                    "Important for writing robust code"
                 ],
                 "steps": [
-                    "Create variables of different types",
-                    "Use type() to check each one",
-                    "Observe the output format",
-                    "Use type() for debugging"
+                    "Learn why type checking is important",
+                    "Use type() function",
+                    "Check types of variables",
+                    "Use isinstance()",
+                    "Handle different types safely"
                 ],
                 "quiz": [
                     {
-                        "question": "What does type('hello') return?",
-                        "options": ["<class 'str'>", "<class 'int'>", "error"],
-                        "correct": 0
+                        "question": "What does type(5) return?",
+                        "options": ["int", "<class 'int'>", "integer"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "What is type of '5'?",
+                        "options": ["<class 'int'>", "<class 'str'>", "<class 'float'>"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "What does isinstance(5, int) return?",
+                        "options": ["5", "True", "int"],
+                        "correct": 1
+                    },
+                    {
+                        "question": "Is True an int?",
+                        "options": ["Yes", "No", "Sometimes"],
+                        "correct": 1
                     }
                 ]
             },
@@ -419,196 +730,134 @@ print(type(a))  # <class 'bool'>
                 "description": "Convert between different data types",
                 "subject": "Python Basics",
                 "difficulty": "beginner",
-                "min_age": 12,
+                "min_age": 10,
                 "max_age": 18,
                 "duration_minutes": 25,
+                "video_url": "https://www.youtube.com/watch?v=cQT33yu9pY8",
                 "content": """
-# Type Conversion (VERY IMPORTANT)
+# Lesson 8: Type Conversion (VERY IMPORTANT)
 
-Sometimes you must convert data types.
+## Why Convert Types?
+- User input is always a string
+- Mathematical operations need numbers
+- Combining different types requires conversion
+- Displaying numbers as text
 
-## Convert to Integer
+## Convert to Integer: int()
 ```python
-num = "10"
-num = int(num)  # Now it's 10 (integer)
+# From string
+age_str = "25"
+age = int(age_str)
+print(age + 5)  # Works! Result: 30
+
+# From float
+height_float = 5.9
+height_int = int(height_float)  # 5 (truncates decimal)
+
+# From boolean
+true_value = int(True)   # 1
+false_value = int(False) # 0
 ```
 
-## Convert to Float
+## Convert to Float: float()
 ```python
-price = "99.5"
-price = float(price)  # Now it's 99.5 (float)
+# From string
+price_str = "19.99"
+price = float(price_str)
+
+# From integer
+count = 10
+decimal_count = float(count)  # 10.0
+
+# From boolean
+true_value = float(True)   # 1.0
+false_value = float(False) # 0.0
 ```
 
-## Convert to String
+## Convert to String: str()
 ```python
-age = 15
+# From integer
+age = 25
+message = "I am " + str(age) + " years old"
+
+# From float
+price = 19.99
+print("Price: $" + str(price))
+
+# From boolean
+is_student = True
+print(str(is_student))  # "True"
+```
+
+## Common Problem & Solution
+❌ **This doesn't work:**
+```python
+age = 25
+print("My age is " + age)  # ERROR!
+```
+
+✅ **This works:**
+```python
+age = 25
 print("My age is " + str(age))  # Works!
+# Or use f-strings:
+print(f"My age is {age}")  # Also works!
 ```
 
-## ⚠️ Common Mistake
-
+## User Input Example
 ```python
-print("Age: " + 15)  # ERROR!
+# User input is always a string
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))  # Convert to int
+height = float(input("Enter your height: "))  # Convert to float
+
+print(f"{name} is {age} years old and {height}m tall")
 ```
 
-**Correct way:**
+## Handling Conversion Errors
 ```python
-print("Age: " + str(15))  # Works!
+try:
+    number = int("abc")  # This will cause an error
+except ValueError:
+    print("Cannot convert 'abc' to integer")
 ```
-
-## Key Points:
-- int() converts to integer
-- float() converts to float
-- str() converts to string
-- Use for user input processing
-- Essential for mixing data types
                 """,
                 "information": [
                     "Type conversion is critical in Python",
-                    "int() converts strings to integers",
+                    "int() converts strings and other types to integers",
                     "float() converts to decimal numbers",
                     "str() converts any type to string",
                     "Needed when combining different types",
-                    "Common source of beginner errors"
+                    "Common source of beginner errors",
+                    "User input is always a string by default"
                 ],
                 "steps": [
-                    "Convert string to integer",
-                    "Convert string to float",
-                    "Convert number to string",
-                    "Combine different types correctly"
+                    "Learn why conversion is needed",
+                    "Convert string to int",
+                    "Convert int to float",
+                    "Convert numbers to string",
+                    "Handle conversion errors"
                 ],
                 "quiz": [
                     {
-                        "question": "How do you convert 'Hello' to string? (It's already a string, but the conversion function is:)",
-                        "options": ["int('Hello')", "float('Hello')", "str('Hello')"],
-                        "correct": 2
+                        "question": "Convert '10' to int.",
+                        "options": ["integer('10')", "int('10')", "to_int('10')"],
+                        "correct": 1
                     },
                     {
-                        "question": "What does int('25') return?",
-                        "options": ["'25'", "25.0", "25"],
-                        "correct": 2
-                    }
-                ]
-            },
-            {
-                "title": "Lesson 9: Multiple Variable Assignment",
-                "description": "Assign multiple variables efficiently",
-                "subject": "Python Basics",
-                "difficulty": "beginner",
-                "min_age": 12,
-                "max_age": 18,
-                "duration_minutes": 15,
-                "content": """
-# Multiple Variable Assignment
-
-## Assign Different Values
-```python
-a, b, c = 10, 20, 30
-print(a, b, c)  # 10 20 30
-```
-
-## Assign Same Value
-```python
-x = y = z = 100
-print(x, y, z)  # 100 100 100
-```
-
-## Unpack Lists
-```python
-numbers = [1, 2, 3]
-x, y, z = numbers
-print(x, y, z)  # 1 2 3
-```
-
-## Key Points:
-- Multiple assignments on one line
-- Must have same number of values and variables
-- Makes code more concise
-- Easier to read and maintain
-                """,
-                "information": [
-                    "Assign multiple variables at once",
-                    "Number of variables must match values",
-                    "Assign same value to multiple variables",
-                    "Unpack sequences into variables",
-                    "Makes code cleaner and more Pythonic"
-                ],
-                "steps": [
-                    "Assign different values to multiple variables",
-                    "Assign same value to multiple variables",
-                    "Unpack a list into variables",
-                    "Use multiple assignments in practice"
-                ],
-                "quiz": [
+                        "question": "Convert 5 to string.",
+                        "options": ["string(5)", "str(5)", "to_str(5)"],
+                        "correct": 1
+                    },
                     {
-                        "question": "What are the values of a, b, c after: a, b, c = 1, 2, 3?",
-                        "options": ["1, 2, 3", "3, 2, 1", "Error"],
-                        "correct": 0
-                    }
-                ]
-            },
-            {
-                "title": "Lesson 10: User Input (Using Variables)",
-                "description": "Get input from users and store in variables",
-                "subject": "Python Basics",
-                "difficulty": "beginner",
-                "min_age": 12,
-                "max_age": 18,
-                "duration_minutes": 20,
-                "content": """
-# User Input (Using Variables)
-
-## Getting Input from User
-```python
-name = input("Enter your name: ")
-age = int(input("Enter your age: "))
-
-print("Hello", name)
-print("Next year you will be", age + 1)
-```
-
-## Important Points:
-- input() always returns a string
-- Convert to int or float when needed
-- Use meaningful prompts
-- Store result in a variable
-
-## Example Program:
-```python
-name = input("What's your name? ")
-age = int(input("How old are you? "))
-height = float(input("What's your height in cm? "))
-
-print(f"Name: {name}")
-print(f"Age: {age}")
-print(f"Height: {height} cm")
-print(f"Next year you'll be {age + 1}")
-```
-
-## Key Points:
-- input() waits for user to type
-- Always returns string type
-- Must convert if you need numbers
-- Can use for interactive programs
-                """,
-                "information": [
-                    "input() function gets user input",
-                    "Always returns string type",
-                    "Convert with int() or float()",
-                    "Use for interactive programs",
-                    "Store input in variables for reuse"
-                ],
-                "steps": [
-                    "Use input() to get name",
-                    "Use input() with int() for number",
-                    "Store input in variables",
-                    "Process and display user data"
-                ],
-                "quiz": [
+                        "question": "What error for int('abc')?",
+                        "options": ["TypeError", "ValueError", "ConversionError"],
+                        "correct": 1
+                    },
                     {
-                        "question": "What type does input() always return?",
-                        "options": ["int", "float", "str"],
-                        "correct": 2
+                        "question": "Why convert input data?",
+                        "options": ["It's optional", "Input is always string", "To save memory"],
+                        "correct": 1
                     }
                 ]
             }
@@ -624,7 +873,7 @@ print(f"Next year you'll be {age + 1}")
             db.session.add(lesson)
         
         db.session.commit()
-        print("✅ Successfully added 10 Python Basics lessons!")
+        print("✅ Successfully added 8 Python Basics lessons!")
         print("\nLessons created:")
         for i, lesson_data in enumerate(lessons_data, 1):
             print(f"  {i}. {lesson_data['title']}")

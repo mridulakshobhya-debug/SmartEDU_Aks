@@ -53,7 +53,22 @@ async function loadCourseDetail() {
       <div style="grid-column: 1/-1;">
         <h2 style="color: var(--text-primary); margin-bottom: 1.5rem; font-size: 1.8rem;">📹 Lesson Video</h2>
         <div style="background: var(--bg-secondary); border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
-          <img src="${lesson.video_url}" style="width: 100%; height: 100%; object-fit: cover;" alt="Video Placeholder" />
+          ${lesson.video_url ? `
+            <iframe 
+              width="100%" 
+              height="100%" 
+              src="${lesson.video_url.replace(/watch\?v=/, 'embed/')}" 
+              title="Lesson Video" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerpolicy="strict-origin-when-cross-origin" 
+              allowfullscreen>
+            </iframe>
+          ` : `
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary);">
+              <p style="color: var(--text-muted); font-size: 1.1rem;">No video available for this lesson</p>
+            </div>
+          `}
         </div>
       </div>
     `;
