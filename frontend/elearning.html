@@ -29,8 +29,28 @@
   <main>
     <div class="container" style="padding-top: 2rem;">
       <div style="margin-bottom: 2rem;">
-        <h2 style="margin-bottom: 0.5rem;">📖 Interactive Learning</h2>
+        <h2 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;"><span style="animation: infiniteFloat 3s ease-in-out infinite;">📖</span> Interactive Learning</h2>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Master new skills with our carefully curated lessons across 10+ subjects</p>
+
+        <!-- Premium Stats Bar -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+          <div style="background: linear-gradient(135deg, var(--primary-light), rgba(59, 130, 246, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--primary); animation: slideInUp 0.6s ease;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Your Progress</div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-top: 0.5rem;">0%</div>
+          </div>
+          <div style="background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 184, 148, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--success); animation: slideInUp 0.6s ease 0.1s both;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Certificates</div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--success); margin-top: 0.5rem;">0</div>
+          </div>
+          <div style="background: linear-gradient(135deg, rgba(253, 203, 110, 0.1), rgba(253, 203, 110, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--warning); animation: slideInUp 0.6s ease 0.2s both;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Badges Earned</div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning); margin-top: 0.5rem;">0</div>
+          </div>
+          <div style="background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(108, 92, 231, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--secondary); animation: slideInUp 0.6s ease 0.3s both;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Total Hours</div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--secondary); margin-top: 0.5rem;">0h</div>
+          </div>
+        </div>
 
         <!-- Search and Filter Bar -->
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; align-items: center;">
@@ -39,17 +59,17 @@
             type="text" 
             id="searchInput" 
             placeholder="🔍 Search courses..." 
-            style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; transition: all 0.2s;"
+            style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
             onkeyup="filterCourses()"
-            onfocus="this.style.borderColor='var(--primary)'"
-            onblur="this.style.borderColor='var(--border)'"
+            onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 4px 12px rgba(31, 92, 240, 0.15)'"
+            onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'"
           />
 
           <!-- Subject Filter -->
           <select 
             id="subjectFilter" 
             onchange="filterCourses()" 
-            style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; cursor: pointer; transition: all 0.2s;"
+            style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
           >
             <option value="">All Topics</option>
             <option value="Artificial Intelligence">Artificial Intelligence</option>
@@ -64,7 +84,7 @@
           <select 
             id="difficultyFilter" 
             onchange="filterCourses()" 
-            style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; cursor: pointer; transition: all 0.2s;"
+            style="padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
           >
             <option value="">All Levels</option>
             <option value="beginner">Beginner</option>
@@ -75,16 +95,16 @@
           <!-- Clear Filters -->
           <button 
             onclick="clearFilters()" 
-            style="padding: 0.75rem 1.5rem; background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); font-weight: 600; cursor: pointer; transition: all 0.2s;"
-            onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.borderColor='var(--primary)'"
-            onmouseout="this.style.background='var(--bg-secondary)'; this.style.color='var(--text-primary)'; this.style.borderColor='var(--border)'"
+            style="padding: 0.75rem 1.5rem; background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
+            onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.borderColor='var(--primary)'; this.style.boxShadow='0 8px 16px rgba(31, 92, 240, 0.2)'; this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.background='var(--bg-secondary)'; this.style.color='var(--text-primary)'; this.style.borderColor='var(--border)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)'"
           >
             ✕ Clear
           </button>
         </div>
 
         <!-- Results Counter -->
-        <div style="margin-bottom: 1rem; padding: 0.5rem 1rem; background: var(--primary-light); border-radius: 8px; display: inline-block;">
+        <div style="margin-bottom: 1rem; padding: 0.75rem 1.25rem; background: linear-gradient(135deg, var(--primary-light), rgba(108, 92, 231, 0.05)); border-radius: 8px; display: inline-block; border-left: 3px solid var(--primary); animation: slideInUp 0.6s ease 0.2s both;">
           <span id="resultsCount" style="color: var(--text-primary); font-weight: 600;">Showing all courses</span>
         </div>
       </div>

@@ -14,13 +14,15 @@
 
     .chat-container {
       background: var(--bg-secondary);
-      border: 1px solid var(--border);
+      border: 2px solid transparent;
+      border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
       border-radius: var(--radius-lg);
       display: flex;
       flex-direction: column;
       height: 700px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 8px 32px rgba(31, 92, 240, 0.15);
+      animation: slideInUp 0.6s ease;
     }
 
     .chat-header {
@@ -30,6 +32,16 @@
       font-weight: 700;
       font-size: 1.25rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chat-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmerFlow 3s infinite;
     }
 
     .chat-messages {
@@ -39,12 +51,13 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-md);
+      background: linear-gradient(180deg, var(--bg-secondary), rgba(59, 130, 246, 0.02));
     }
 
     .message {
       display: flex;
       margin-bottom: var(--space-md);
-      animation: fadeInUp 0.3s ease-out;
+      animation: fadeInUp 0.4s ease-out;
     }
 
     .message.user {
@@ -58,12 +71,15 @@
       word-wrap: break-word;
       line-height: 1.6;
       font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
     .message.user .message-content {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border-bottom-right-radius: var(--radius-sm);
+      animation: slideInRight 0.4s ease;
     }
 
     .message.bot .message-content {
@@ -71,6 +87,12 @@
       color: var(--text-primary);
       border: 1px solid var(--border);
       border-bottom-left-radius: var(--radius-sm);
+      animation: slideInLeft 0.4s ease;
+    }
+
+    .message.bot .message-content:hover {
+      box-shadow: 0 8px 20px rgba(31, 92, 240, 0.15);
+      transform: translateX(5px);
     }
 
     [data-theme="dark"] .message.bot .message-content {
@@ -85,17 +107,30 @@
       display: flex;
       gap: var(--space-md);
       background: var(--bg-primary);
+      position: relative;
+    }
+
+    .chat-input-area::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      animation: gradientFlow 3s ease infinite;
     }
 
     .chat-input-area input {
       flex: 1;
       padding: var(--space-md);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: var(--radius-md);
       font-family: var(--font-body);
       font-size: 0.95rem;
       background: var(--bg-primary);
       color: var(--text-primary);
+      transition: all 0.3s ease;
     }
 
     [data-theme="dark"] .chat-input-area input {
@@ -107,12 +142,13 @@
     .chat-input-area input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(31, 118, 232, 0.1);
+      box-shadow: 0 0 0 3px rgba(31, 92, 240, 0.2), 0 8px 16px rgba(31, 92, 240, 0.15);
+      transform: translateY(-2px);
     }
 
     .chat-input-area button {
       padding: var(--space-md) var(--space-lg);
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: none;
       border-radius: var(--radius-md);
@@ -361,5 +397,6 @@
       document.getElementById('messageInput').focus();
     });
   </script>
+  <script src="js/theme.js"></script>
 </body>
 </html>

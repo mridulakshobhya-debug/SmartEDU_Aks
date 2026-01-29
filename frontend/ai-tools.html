@@ -29,11 +29,15 @@
 
   <main>
     <!-- Hero Section -->
-    <section class="hero-section" style="padding: 3rem 1rem; min-height: 400px;">
+    <section class="hero-section" style="padding: 3rem 1rem; min-height: 400px; position: relative;">
+      <div class="hero-gradient-bg"></div>
+      <div style="position: absolute; top: 20%; left: 5%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(31, 92, 240, 0.2), transparent); border-radius: 50%; animation: infiniteFloat 20s ease-in-out infinite;"></div>
+      <div style="position: absolute; bottom: 10%; right: 10%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(108, 92, 231, 0.15), transparent); border-radius: 50%; animation: infiniteFloat 25s ease-in-out infinite 2s;"></div>
+      
       <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <h1 style="color: white; font-size: 3rem; margin-bottom: 1rem;">🤖 AI Tools</h1>
-        <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; max-width: 600px;">
+      <div class="hero-content" style="position: relative; z-index: 2;">
+        <h1 style="color: white; font-size: 3rem; margin-bottom: 1rem; animation: slideInDown 0.8s ease; text-shadow: 0 4px 20px rgba(0,0,0,0.3);">🤖 AI Tools</h1>
+        <p style="color: rgba(255,255,255,0.95); font-size: 1.2rem; max-width: 600px; animation: slideInUp 0.8s ease 0.2s both;">
           Leverage the power of AI to enhance your learning experience with intelligent tools
         </p>
       </div>
@@ -41,24 +45,26 @@
 
     <div class="container" style="padding: 3rem 1rem;">
       <!-- Tools Grid -->
-      <div class="grid grid-2" style="margin-bottom: 3rem;">
+      <div class="grid grid-2" style="margin-bottom: 3rem; gap: 2rem;">
         <!-- Worksheet Generator Card -->
-        <div class="card tool-card" style="cursor: pointer;" onclick="switchTab('generator')">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+        <div class="card premium-lesson-card tool-card" style="cursor: pointer; background: linear-gradient(135deg, var(--bg-primary), rgba(59, 130, 246, 0.02)); animation: slideInUp 0.6s ease 0.2s both;" onclick="switchTab('generator')" onmouseover="this.style.transform='translateY(-15px) scale(1.03)'; this.style.boxShadow='0 20px 60px rgba(31, 92, 240, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(31, 92, 240, 0.1)'">
+          <div style="font-size: 3rem; margin-bottom: 1rem; animation: infiniteFloat 3s ease-in-out infinite;">📝</div>
           <h2>Worksheet Generator</h2>
           <p>Generate custom worksheets for different subjects with adjustable difficulty levels.</p>
-          <div style="color: var(--primary); font-weight: 600; margin-top: 1rem;">
-            Get Started →
+          <div style="color: var(--primary); font-weight: 600; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            Get Started 
+            <span style="display: inline-block; animation: slideInRight 0.6s ease infinite;">→</span>
           </div>
         </div>
 
         <!-- Analyzer Card -->
-        <div class="card tool-card" style="cursor: pointer;" onclick="switchTab('analyzer')">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+        <div class="card premium-lesson-card tool-card" style="cursor: pointer; background: linear-gradient(135deg, var(--bg-primary), rgba(108, 92, 231, 0.02)); animation: slideInUp 0.6s ease 0.3s both;" onclick="switchTab('analyzer')" onmouseover="this.style.transform='translateY(-15px) scale(1.03)'; this.style.boxShadow='0 20px 60px rgba(108, 92, 231, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(108, 92, 231, 0.1)'">
+          <div style="font-size: 3rem; margin-bottom: 1rem; animation: infiniteFloat 3s ease-in-out infinite 0.5s;">🔍</div>
           <h2>Content Analyzer</h2>
           <p>Analyze and understand complex educational content with AI-powered insights.</p>
-          <div style="color: var(--primary); font-weight: 600; margin-top: 1rem;">
-            Get Started →
+          <div style="color: var(--primary); font-weight: 600; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            Get Started
+            <span style="display: inline-block; animation: slideInRight 0.6s ease infinite;">→</span>
           </div>
         </div>
       </div>

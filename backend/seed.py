@@ -15,6 +15,18 @@ from models.book import Book
 from models.lesson import Lesson
 from models.user import User
 
+# Import all seed functions
+from seed_python_basics import seed_python_basics_course
+from seed_advanced_python import seed_advanced_python_course
+from seed_javascript import seed_javascript
+from seed_javascript_advanced import seed_advanced_javascript
+from seed_web_development import seed_web_development
+from seed_web_development_advanced import seed_advanced_web_development
+from seed_computer_science import seed_computer_science
+from seed_computer_science_advanced import seed_advanced_computer_science
+from seed_artificial_intelligence import seed_artificial_intelligence
+from seed_artificial_intelligence_advanced import seed_advanced_artificial_intelligence
+
 
 def seed_books():
     """Add sample books to database"""
@@ -1666,13 +1678,45 @@ def main():
         print("\nAdding books...")
         seed_books()
         
-        print("\nAdding lessons...")
-        seed_lessons()
+        print("\nAdding lessons from seed files...")
+        # Call all individual seed functions
+        print("  → Python Basics...")
+        seed_python_basics_course()
+        
+        print("  → Python Advanced...")
+        seed_advanced_python_course()
+        
+        print("  → JavaScript...")
+        seed_javascript()
+        
+        print("  → JavaScript Advanced...")
+        seed_advanced_javascript()
+        
+        print("  → Web Development...")
+        seed_web_development()
+        
+        print("  → Web Development Advanced...")
+        seed_advanced_web_development()
+        
+        print("  → Computer Science...")
+        seed_computer_science()
+        
+        print("  → Computer Science Advanced...")
+        seed_advanced_computer_science()
+        
+        print("  → Artificial Intelligence...")
+        seed_artificial_intelligence()
+        
+        print("  → Artificial Intelligence Advanced...")
+        seed_advanced_artificial_intelligence()
         
         print("\nAdding users...")
         seed_users()
         
-        print("\n[+] Database seeded successfully!\n")
+        # Count total lessons
+        total_lessons = Lesson.query.count()
+        print(f"\n[+] Database seeded successfully!")
+        print(f"[+] Total lessons in database: {total_lessons}\n")
 
 
 if __name__ == "__main__":
