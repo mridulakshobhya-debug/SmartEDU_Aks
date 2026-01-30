@@ -176,7 +176,7 @@ def ai_chat(age, user_message, conversation_history=None):
     """
     Conversational AI chat with context awareness
     Uses conversation history for more intelligent responses
-    Falls back to recommendations if API unavailable
+    Falls back to friendly responses if API unavailable
     """
     from config import Config
     
@@ -208,8 +208,20 @@ def ai_chat(age, user_message, conversation_history=None):
     
     # If no API key or invalid, use fallback
     if not api_key or api_key == "gsk_YOUR_GROQ_API_KEY_HERE" or api_key == "your_groq_api_key_here":
-        logger.info("No valid Groq API key, using fallback recommendations")
-        return recommend(age, user_message)
+        logger.info("No valid Groq API key, using fallback response")
+        # Simple fallback responses for common messages
+        user_msg_lower = user_message.lower().strip()
+        
+        if any(word in user_msg_lower for word in ['hi', 'hello', 'hey', 'greetings']):
+            return f"Hello! 👋 I'm SmartEDU's AI Assistant. I'm here to help you find great books and answer your learning questions. What would you like to know about?"
+        elif any(word in user_msg_lower for word in ['how are you', 'how are u']):
+            return "I'm doing great, thanks for asking! 😊 I'm ready to help you discover new books and answer your learning questions. What can I assist you with?"
+        elif any(word in user_msg_lower for word in ['book', 'recommend', 'suggest']):
+            return recommend(age, "fiction")
+        elif any(word in user_msg_lower for word in ['help', 'what can']):
+            return "I can help you with:\n\n📚 **Book Recommendations** - Just tell me what you're interested in!\n💡 **Learning Tips** - Ask for advice on any subject\n🎓 **Study Suggestions** - I can suggest resources\n\nWhat would you like help with?"
+        else:
+            return f"That's an interesting question! While I don't have access to advanced AI right now, I'm happy to help. You might enjoy exploring our eLearning courses or asking me for book recommendations. What interests you?"
     
     try:
         headers = {
@@ -243,8 +255,8 @@ def ai_chat(age, user_message, conversation_history=None):
     except Exception as e:
         logger.error(f"Unexpected error in ai_chat: {str(e)}")
     
-    # Fallback to database recommendations
-    return recommend(age, user_message)
+    # Fallback to friendly response
+    return "I'm having trouble connecting to my advanced AI features right now, but I'm still here to help! Ask me about books, learning tips, or our courses!"
 
 
 def generate_worksheet(subject, difficulty, num_questions=10, question_type="Mixed", topic=""):
