@@ -1,4 +1,4 @@
-# 📚 SmartEDU - Safe, Age-Aware Learning Platform
+# 📚 SmartEDU - Safe, Age-Aware Learning Platform Unh
 
 An intelligent educational platform that provides age-appropriate learning content and book recommendations using AI.
 
