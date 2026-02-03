@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>eLearning - SmartEDU</title>
+  <title>eLearning - SmartEDU LMS</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header>
     <div class="container">
       <div class="header-wrapper">
-        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU</h1>
+        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU LMS</h1>
         <nav>
           <a href="index.html">Home</a>
           <a href="elearning.html">eLearning</a>
           <a href="ai-tools.html">AI Tools</a>
           <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html">Admin</a>
           <a href="login.html" style="color: var(--primary); font-weight: 600;">Login</a>
           <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Sign Up</a>
         </nav>
@@ -36,21 +37,47 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
           <div style="background: linear-gradient(135deg, var(--primary-light), rgba(59, 130, 246, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--primary); animation: slideInUp 0.6s ease;">
             <div style="font-size: 0.85rem; color: var(--text-muted);">Your Progress</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-top: 0.5rem;">0%</div>
+            <div id="progressPercent" style="font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-top: 0.5rem;">0%</div>
           </div>
-          <div style="background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 184, 148, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--success); animation: slideInUp 0.6s ease 0.1s both;">
+          <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(96, 165, 250, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--primary); animation: slideInUp 0.6s ease 0.1s both;">
             <div style="font-size: 0.85rem; color: var(--text-muted);">Certificates</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: var(--success); margin-top: 0.5rem;">0</div>
+            <div id="certCount" style="font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-top: 0.5rem;">0</div>
           </div>
-          <div style="background: linear-gradient(135deg, rgba(253, 203, 110, 0.1), rgba(253, 203, 110, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--warning); animation: slideInUp 0.6s ease 0.2s both;">
+          <div style="background: linear-gradient(135deg, rgba(96, 165, 250, 0.12), rgba(37, 99, 235, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--secondary); animation: slideInUp 0.6s ease 0.2s both;">
             <div style="font-size: 0.85rem; color: var(--text-muted);">Badges Earned</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning); margin-top: 0.5rem;">0</div>
+            <div id="badgeCount" style="font-size: 1.5rem; font-weight: 700; color: var(--secondary); margin-top: 0.5rem;">0</div>
           </div>
-          <div style="background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(108, 92, 231, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--secondary); animation: slideInUp 0.6s ease 0.3s both;">
+          <div style="background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.05)); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--secondary); animation: slideInUp 0.6s ease 0.3s both;">
             <div style="font-size: 0.85rem; color: var(--text-muted);">Total Hours</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: var(--secondary); margin-top: 0.5rem;">0h</div>
+            <div id="hoursCount" style="font-size: 1.5rem; font-weight: 700; color: var(--secondary); margin-top: 0.5rem;">0h</div>
           </div>
         </div>
+
+        <!-- Learning Paths -->
+        <section class="paths-section">
+          <div class="section-header">
+            <h3 style="margin-bottom: 0.5rem;">Learning Paths</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 0;">Guided step-by-step programs that bundle lessons into clear outcomes.</p>
+          </div>
+          <div id="pathsContainer" class="grid grid-3">
+            <div class="card text-center" style="grid-column: 1/-1;">
+              <p style="color: var(--text-muted);">Loading learning paths...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Guided Projects -->
+        <section class="projects-section">
+          <div class="section-header">
+            <h3 style="margin-bottom: 0.5rem;">Guided Projects</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 0;">Apply what you learn with project-based challenges and feedback.</p>
+          </div>
+          <div id="projectsContainer" class="grid grid-3">
+            <div class="card text-center" style="grid-column: 1/-1;">
+              <p style="color: var(--text-muted);">Loading guided projects...</p>
+            </div>
+          </div>
+        </section>
 
         <!-- Search and Filter Bar -->
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; align-items: center;">
@@ -61,7 +88,7 @@
             placeholder="🔍 Search courses..." 
             style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
             onkeyup="filterCourses()"
-            onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 4px 12px rgba(31, 92, 240, 0.15)'"
+            onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 4px 12px rgba(37, 99, 235, 0.15)'"
             onblur="this.style.borderColor='var(--border)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'"
           />
 
@@ -96,7 +123,7 @@
           <button 
             onclick="clearFilters()" 
             style="padding: 0.75rem 1.5rem; background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
-            onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.borderColor='var(--primary)'; this.style.boxShadow='0 8px 16px rgba(31, 92, 240, 0.2)'; this.style.transform='translateY(-2px)'"
+            onmouseover="this.style.background='var(--primary)'; this.style.color='white'; this.style.borderColor='var(--primary)'; this.style.boxShadow='0 8px 16px rgba(37, 99, 235, 0.2)'; this.style.transform='translateY(-2px)'"
             onmouseout="this.style.background='var(--bg-secondary)'; this.style.color='var(--text-primary)'; this.style.borderColor='var(--border)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)'"
           >
             ✕ Clear
@@ -104,7 +131,7 @@
         </div>
 
         <!-- Results Counter -->
-        <div style="margin-bottom: 1rem; padding: 0.75rem 1.25rem; background: linear-gradient(135deg, var(--primary-light), rgba(108, 92, 231, 0.05)); border-radius: 8px; display: inline-block; border-left: 3px solid var(--primary); animation: slideInUp 0.6s ease 0.2s both;">
+        <div style="margin-bottom: 1rem; padding: 0.75rem 1.25rem; background: linear-gradient(135deg, var(--primary-light), rgba(96, 165, 250, 0.05)); border-radius: 8px; display: inline-block; border-left: 3px solid var(--primary); animation: slideInUp 0.6s ease 0.2s both;">
           <span id="resultsCount" style="color: var(--text-primary); font-weight: 600;">Showing all courses</span>
         </div>
       </div>
@@ -114,16 +141,28 @@
           <p style="color: var(--text-muted);">Loading lessons...</p>
         </div>
       </div>
+
+      <section class="achievements-section">
+        <div class="section-header">
+          <h3 style="margin-bottom: 0.5rem;">Achievements & Certificates</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 0;">Track your wins and download completion certificates.</p>
+        </div>
+        <div id="badgesContainer" class="grid grid-3" style="margin-bottom: 2rem;"></div>
+        <div id="certificatesContainer" class="grid grid-2"></div>
+      </section>
     </div>
   </main>
 
   <footer>
     <div class="container text-center">
-      <p style="color: var(--text-muted);">© 2026 SmartEDU - Learning Made Safe & Fun</p>
+      <p style="color: var(--text-muted);">© 2026 SmartEDU LMS (Learning Management Systems)</p>
     </div>
   </footer>
 
   <script src="js/theme.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/projects.js"></script>
   <script src="js/elearning.js"></script>
 </body>
 </html>
+

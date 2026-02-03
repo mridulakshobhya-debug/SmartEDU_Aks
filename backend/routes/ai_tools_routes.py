@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from services.ai_service import generate_worksheet, analyze_content, extract_text_from_file
+from services.ai_service import generate_worksheet, analyze_content, extract_text_from_file, generate_project_feedback
 import logging
 
 bp = Blueprint("ai_tools", __name__)
@@ -114,3 +114,32 @@ def analyze_content_endpoint():
     except Exception as e:
         logger.error(f"Content analysis error: {str(e)}")
         return jsonify({"error": "Failed to analyze content", "details": str(e)}), 500
+
+
+@bp.route("/project-feedback", methods=["POST"])
+def project_feedback_endpoint():
+    """Generate feedback for guided project submissions"""
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "Request body is required"}), 400
+
+        submission = (data.get("submission") or "").strip()
+        project_title = (data.get("projectTitle") or "Guided Project").strip()
+        difficulty = (data.get("difficulty") or "intermediate").strip()
+        repo = (data.get("repo") or "").strip()
+
+        if not submission or len(submission) < 20:
+            return jsonify({"error": "submission must be at least 20 characters long"}), 400
+
+        feedback = generate_project_feedback(project_title, submission, difficulty, repo)
+
+        return jsonify({
+            "success": True,
+            "feedback": feedback
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Project feedback error: {str(e)}")
+        return jsonify({"error": "Failed to generate project feedback", "details": str(e)}), 500

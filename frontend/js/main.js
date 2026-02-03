@@ -1,6 +1,6 @@
-// main.js - SmartEDU Frontend Core Initialization
+// main.js - SmartEDU LMS Frontend Core Initialization
 
-console.log('🎓 SmartEDU Application Starting...');
+console.log('🎓 SmartEDU LMS Application Starting...');
 
 /**
  * Theme Management System
@@ -131,6 +131,100 @@ function setupSmoothScroll() {
 }
 
 /**
+ * Community gallery slider with progress bar
+ */
+function initGallerySlider() {
+  const track = document.getElementById('galleryTrack');
+  const progress = document.getElementById('galleryProgress');
+  const shell = document.querySelector('.slideshow-shell');
+  if (!track || !progress || !shell) return;
+
+  const updateProgress = () => {
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const percent = maxScroll > 0 ? (track.scrollLeft / maxScroll) * 100 : 0;
+    progress.style.width = `${percent}%`;
+  };
+
+  const step = () => track.clientWidth * 0.85;
+
+  const scrollByStep = (dir) => {
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 0) return;
+    let next = track.scrollLeft + (dir * step());
+    if (next < 0) next = 0;
+    if (next > maxScroll) next = maxScroll;
+    track.scrollTo({ left: next, behavior: 'smooth' });
+  };
+
+  const controls = document.createElement('div');
+  controls.className = 'slideshow-controls';
+  controls.innerHTML = `
+    <button class="slideshow-btn" id="galleryPrev" aria-label="Previous slide">&#8592;</button>
+    <button class="slideshow-btn" id="galleryNext" aria-label="Next slide">&#8594;</button>
+    <button class="slideshow-btn" id="galleryToggle" aria-label="Pause autoplay">&#10074;&#10074;</button>
+  `;
+  shell.appendChild(controls);
+
+  const prevBtn = document.getElementById('galleryPrev');
+  const nextBtn = document.getElementById('galleryNext');
+  const toggleBtn = document.getElementById('galleryToggle');
+
+  let paused = false;
+
+  const updateToggle = () => {
+    if (!toggleBtn) return;
+    toggleBtn.innerHTML = paused ? '&#9654;' : '&#10074;&#10074;';
+  };
+
+  if (prevBtn) prevBtn.addEventListener('click', () => {
+    paused = true;
+    updateToggle();
+    scrollByStep(-1);
+  });
+
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+    paused = true;
+    updateToggle();
+    scrollByStep(1);
+  });
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      paused = !paused;
+      updateToggle();
+    });
+  }
+
+  const autoScroll = () => {
+    if (paused) return;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 0) return;
+    const next = track.scrollLeft + step();
+    track.scrollTo({ left: next >= maxScroll ? 0 : next, behavior: 'smooth' });
+  };
+
+  let autoTimer = setInterval(autoScroll, 5500);
+
+  track.addEventListener('scroll', () => {
+    window.requestAnimationFrame(updateProgress);
+  });
+
+  shell.addEventListener('mouseenter', () => {
+    paused = true;
+    updateToggle();
+  });
+
+  shell.addEventListener('mouseleave', () => {
+    paused = false;
+    updateToggle();
+  });
+
+  window.addEventListener('resize', updateProgress);
+  updateToggle();
+  updateProgress();
+}
+
+/**
  * Initialize all systems when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -142,8 +236,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Setup smooth scrolling
   setupSmoothScroll();
+
+  // Initialize gallery slider
+  initGallerySlider();
   
-  console.log('✅ SmartEDU Frontend Fully Initialized');
+  console.log('✅ SmartEDU LMS Frontend Fully Initialized');
   console.log('💡 Tip: Press the theme toggle (🌙/☀️) in the header to switch themes');
 });
 
@@ -181,3 +278,4 @@ if (window.performance && window.performance.timing) {
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScrollEffect();
 });
+

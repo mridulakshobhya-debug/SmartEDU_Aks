@@ -1,7 +1,7 @@
 # AI Tools Feature - Implementation Summary
 
 ## Overview
-A complete AI Tools page has been added to SmartEDU with two main features:
+A complete AI Tools page has been added to SmartEDU LMS with two main features:
 
 ### 1. **Worksheet Generator** 📝
 Generate custom educational worksheets using AI (Groq API).
@@ -155,7 +155,7 @@ Both features work with or without a Groq API key:
 ✅ **Copy to Clipboard** - Easy sharing of analysis results  
 ✅ **Dark Mode Support** - Integrates with theme switcher  
 ✅ **Input Validation** - Server-side validation for all inputs  
-✅ **Professional Styling** - Consistent with SmartEDU design system  
+✅ **Professional Styling** - Consistent with SmartEDU LMS design system  
 
 ## Future Enhancements
 

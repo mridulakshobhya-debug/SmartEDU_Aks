@@ -58,5 +58,5 @@ You can find professional learning platform imagery there with:
 ### Fallback Behavior
 If images fail to load, the slideshow will display:
 - A solid blue gradient background
-- The text "SmartEDU Learning Platform"
+- The text "SmartEDU LMS Learning Platform"
 - This ensures the page still works without images

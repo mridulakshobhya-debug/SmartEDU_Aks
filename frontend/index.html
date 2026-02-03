@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartEDU - Learn & Grow</title>
+  <title>SmartEDU LMS - Learn & Grow</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header>
     <div class="container">
       <div class="header-wrapper">
-        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU</h1>
+        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU LMS</h1>
         <nav>
           <a href="index.html">Home</a>
           <a href="elearning.html">eLearning</a>
           <a href="ai-tools.html">AI Tools</a>
           <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html">Admin</a>
           <a href="login.html" style="color: var(--primary); font-weight: 600;">Login</a>
           <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Sign Up</a>
         </nav>
@@ -26,18 +27,19 @@
     </div>
   </header>
 
-  <!-- Hero Section with Video Background -->
+    <!-- Hero Section with Image Slideshow -->
   <section class="hero-section">
-    <video autoplay muted loop playsinline style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; object-fit: cover;">
-      <source src="Video.mp4" type="video/mp4">
-    </video>
-    
+    <div class="hero-background">
+      <video class="hero-video" autoplay muted loop playsinline aria-hidden="true" poster="images/creative-group-working-startup-using-laptops.jpg">
+        <source src="Video.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-glow" aria-hidden="true"></div>
+    </div>
     <div class="hero-overlay"></div>
-    
     <div class="hero-content">
       <div class="hero-cta">
-        <a href="elearning.html" class="btn btn-primary btn-large">🚀 Start Learning</a>
-        <a href="elearning.html" class="btn btn-outline btn-large">📚 Browse Lessons</a>
+        <a href="elearning.html" class="btn btn-primary btn-large">Start Learning</a>
+        <a href="elearning.html" class="btn btn-outline btn-large">Browse Lessons</a>
       </div>
     </div>
   </section>
@@ -47,7 +49,7 @@
     <!-- Features Grid -->
     <div class="container" style="padding: 4rem 1rem;">
       <div style="text-align: center; margin-bottom: 3rem;">
-        <h2>Why Choose SmartEDU?</h2>
+        <h2>Why Choose SmartEDU LMS?</h2>
         <p style="color: var(--text-muted); font-size: 1.1rem;">Discover features designed for safe and effective learning</p>
       </div>
       
@@ -98,16 +100,16 @@
     <div class="container" style="padding: 4rem 1rem; text-align: center; margin-bottom: 2rem;">
       <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 3rem;">
         <h2 style="color: white; margin-bottom: 1rem;">Ready to Start Learning?</h2>
-        <p style="color: rgba(255,255,255,0.9); margin-bottom: 2rem; font-size: 1.1rem;">Join thousands of students learning safely with SmartEDU</p>
+        <p style="color: rgba(255,255,255,0.9); margin-bottom: 2rem; font-size: 1.1rem;">Join thousands of students learning safely with SmartEDU LMS</p>
         <a href="elearning.html" class="btn btn-outline btn-large">Get Started Now</a>
       </div>
     </div>
 
     <!-- ==================== PREMIUM FEATURES SECTION ==================== -->
-    <section class="premium-section" style="padding: 5rem 1rem; background: linear-gradient(135deg, var(--primary-light), rgba(108, 92, 231, 0.05)); position: relative; overflow: hidden;">
+    <section class="premium-section" style="padding: 5rem 1rem; background: linear-gradient(135deg, var(--primary-light), rgba(96, 165, 250, 0.05)); position: relative; overflow: hidden;">
       <div class="premium-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.5;">
-        <div style="position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(31, 92, 240, 0.2), transparent); border-radius: 50%; top: -100px; left: -100px; animation: floatUp 20s ease-in infinite;"></div>
-        <div style="position: absolute; width: 200px; height: 200px; background: radial-gradient(circle, rgba(108, 92, 231, 0.2), transparent); border-radius: 50%; bottom: -50px; right: -50px; animation: floatUp 15s ease-in infinite 2s;"></div>
+        <div style="position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(37, 99, 235, 0.2), transparent); border-radius: 50%; top: -100px; left: -100px; animation: floatUp 20s ease-in infinite;"></div>
+        <div style="position: absolute; width: 200px; height: 200px; background: radial-gradient(circle, rgba(96, 165, 250, 0.2), transparent); border-radius: 50%; bottom: -50px; right: -50px; animation: floatUp 15s ease-in infinite 2s;"></div>
       </div>
 
       <div class="container" style="position: relative; z-index: 1;">
@@ -118,42 +120,42 @@
 
         <div class="grid grid-3" style="gap: 2rem; margin-bottom: 3rem;">
           <!-- Feature 1 -->
-          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(31, 92, 240, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.3s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(31, 92, 240, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.3s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
             <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
             <h3 style="margin-bottom: 0.5rem;">Personalized Learning Paths</h3>
             <p style="color: var(--text-muted); margin-bottom: 0;">AI-powered recommendations tailored to your learning style, pace, and goals for maximum efficiency.</p>
           </div>
 
           <!-- Feature 2 -->
-          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(108, 92, 231, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.4s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(108, 92, 231, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(96, 165, 250, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.4s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(96, 165, 250, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
             <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
             <h3 style="margin-bottom: 0.5rem;">Progress Analytics</h3>
             <p style="color: var(--text-muted); margin-bottom: 0;">Detailed insights into your learning journey with visual progress tracking and achievement milestones.</p>
           </div>
 
           <!-- Feature 3 -->
-          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(0, 184, 148, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.5s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0, 184, 148, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.12); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.5s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.18)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
             <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
             <h3 style="margin-bottom: 0.5rem;">Certificates & Badges</h3>
             <p style="color: var(--text-muted); margin-bottom: 0;">Earn verified certificates and digital badges upon course completion to showcase your achievements.</p>
           </div>
 
           <!-- Feature 4 -->
-          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(253, 203, 110, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.6s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(253, 203, 110, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.12); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.6s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.18)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
             <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
             <h3 style="margin-bottom: 0.5rem;">Community Learning</h3>
             <p style="color: var(--text-muted); margin-bottom: 0;">Join study groups, collaborate with peers, and learn from experienced mentors in our vibrant community.</p>
           </div>
 
           <!-- Feature 5 -->
-          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(9, 132, 227, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.7s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(9, 132, 227, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(14, 165, 233, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.7s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(14, 165, 233, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
             <div style="font-size: 3rem; margin-bottom: 1rem;">📲</div>
             <h3 style="margin-bottom: 0.5rem;">Offline Access</h3>
             <p style="color: var(--text-muted); margin-bottom: 0;">Download lessons and continue learning anytime, anywhere, even without internet connection.</p>
           </div>
 
           <!-- Feature 6 -->
-          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(231, 76, 60, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.8s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(231, 76, 60, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.12); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.8s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.18)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
             <div style="font-size: 3rem; margin-bottom: 1rem;">🎨</div>
             <h3 style="margin-bottom: 0.5rem;">Interactive Projects</h3>
             <p style="color: var(--text-muted); margin-bottom: 0;">Build real-world projects, get instant feedback, and develop practical skills with hands-on exercises.</p>
@@ -162,71 +164,8 @@
       </div>
     </section>
 
-    <!-- ==================== PRICING SECTION ==================== -->
-    <section style="padding: 5rem 1rem; background: var(--bg-primary);">
-      <div class="container">
-        <div style="text-align: center; margin-bottom: 4rem;">
-          <h2 style="font-size: 2.5rem; margin-bottom: 1rem; animation: slideInUp 0.8s ease;">💳 Flexible Pricing Plans</h2>
-          <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; animation: slideInUp 0.8s ease 0.2s both;">Choose the perfect plan for your learning journey</p>
-        </div>
-
-        <div class="grid grid-3" style="gap: 2rem; max-width: 1200px; margin: 0 auto;">
-          <!-- Free Plan -->
-          <div class="pricing-card" style="background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 16px; padding: 2rem; position: relative; animation: slideInUp 0.8s ease 0.3s both; transition: all 0.3s ease;" onmouseover="this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'; this.style.transform='translateY(-5px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
-            <h3 style="margin-bottom: 0.5rem;">🎓 Free Plan</h3>
-            <div style="margin: 1.5rem 0;">
-              <span style="font-size: 2.5rem; font-weight: bold; color: var(--primary);">$0</span>
-              <span style="color: var(--text-muted);"> / month</span>
-            </div>
-            <ul style="list-style: none; padding: 0; margin: 2rem 0;">
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ Access to 100+ lessons</li>
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ AI Chatbot support</li>
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ Basic analytics</li>
-              <li style="padding: 0.5rem 0; color: var(--text-muted);">✗ Certificates</li>
-              <li style="padding: 0.5rem 0; color: var(--text-muted);">✗ Advanced projects</li>
-            </ul>
-            <a href="signup.html" class="btn btn-outline" style="display: block; text-align: center; padding: 0.75rem;">Get Started</a>
-          </div>
-
-          <!-- Pro Plan -->
-          <div class="pricing-card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: 3px solid var(--primary); border-radius: 16px; padding: 2rem; position: relative; transform: scale(1.05); animation: slideInUp 0.8s ease 0.4s both; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 20px 50px rgba(31, 92, 240, 0.3)'" onmouseout="this.style.transform='scale(1.05)'; this.style.boxShadow='none'">
-            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--warning); color: var(--text-primary); padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 600;">POPULAR</div>
-            <h3 style="margin-bottom: 0.5rem; margin-top: 0.5rem;">⭐ Pro Plan</h3>
-            <div style="margin: 1.5rem 0;">
-              <span style="font-size: 2.5rem; font-weight: bold;">$9.99</span>
-              <span style="opacity: 0.8;"> / month</span>
-            </div>
-            <ul style="list-style: none; padding: 0; margin: 2rem 0;">
-              <li style="padding: 0.5rem 0;">✓ All Free features</li>
-              <li style="padding: 0.5rem 0;">✓ Unlimited lessons</li>
-              <li style="padding: 0.5rem 0;">✓ Certificates & Badges</li>
-              <li style="padding: 0.5rem 0;">✓ Advanced projects</li>
-              <li style="padding: 0.5rem 0;">✓ Priority support</li>
-            </ul>
-            <a href="signup.html" class="btn" style="display: block; text-align: center; padding: 0.75rem; background: white; color: var(--primary); font-weight: 600; border-radius: 8px; text-decoration: none;">Subscribe Now</a>
-          </div>
-
-          <!-- Enterprise Plan -->
-          <div class="pricing-card" style="background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 16px; padding: 2rem; position: relative; animation: slideInUp 0.8s ease 0.5s both; transition: all 0.3s ease;" onmouseover="this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'; this.style.transform='translateY(-5px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
-            <h3 style="margin-bottom: 0.5rem;">🚀 Enterprise</h3>
-            <div style="margin: 1.5rem 0;">
-              <span style="font-size: 2.5rem; font-weight: bold; color: var(--primary);">Custom</span>
-            </div>
-            <ul style="list-style: none; padding: 0; margin: 2rem 0;">
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ All Pro features</li>
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ Team collaboration</li>
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ Custom curriculum</li>
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ Dedicated support</li>
-              <li style="padding: 0.5rem 0; color: var(--text-secondary);">✓ API access</li>
-            </ul>
-            <a href="#" class="btn btn-outline" style="display: block; text-align: center; padding: 0.75rem;">Contact Sales</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ==================== TESTIMONIALS SECTION ==================== -->
-    <section style="padding: 5rem 1rem; background: linear-gradient(135deg, rgba(31, 92, 240, 0.05), rgba(108, 92, 231, 0.05));">
+    <section style="padding: 5rem 1rem; background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(96, 165, 250, 0.05));">
       <div class="container">
         <div style="text-align: center; margin-bottom: 4rem;">
           <h2 style="font-size: 2.5rem; margin-bottom: 1rem; animation: slideInUp 0.8s ease;">⭐ Success Stories</h2>
@@ -237,9 +176,9 @@
           <!-- Testimonial 1 -->
           <div class="testimonial-card" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.08); animation: slideInUp 0.8s ease 0.3s both;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 16px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'">
             <div style="display: flex; margin-bottom: 1rem;">
-              <span style="color: #f59e0b; font-size: 1.2rem;">★ ★ ★ ★ ★</span>
+              <span style="color: #60a5fa; font-size: 1.2rem;">★ ★ ★ ★ ★</span>
             </div>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-style: italic;">"SmartEDU transformed my learning experience. The AI-powered recommendations helped me master Python in just 3 months!"</p>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-style: italic;">"SmartEDU LMS transformed my learning experience. The AI-powered recommendations helped me master Python in just 3 months!"</p>
             <div style="display: flex; align-items: center;">
               <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); margin-right: 1rem;"></div>
               <div>
@@ -252,11 +191,11 @@
           <!-- Testimonial 2 -->
           <div class="testimonial-card" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.08); animation: slideInUp 0.8s ease 0.4s both;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 16px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'">
             <div style="display: flex; margin-bottom: 1rem;">
-              <span style="color: #f59e0b; font-size: 1.2rem;">★ ★ ★ ★ ★</span>
+              <span style="color: #60a5fa; font-size: 1.2rem;">★ ★ ★ ★ ★</span>
             </div>
             <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-style: italic;">"The interactive projects and community support made learning web development enjoyable. Best investment in my education!"</p>
             <div style="display: flex; align-items: center;">
-              <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--success), var(--info)); margin-right: 1rem;"></div>
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--primary)); margin-right: 1rem;"></div>
               <div>
                 <strong>Sarah Williams</strong>
                 <div style="color: var(--text-muted); font-size: 0.9rem;">Full-Stack Developer</div>
@@ -267,11 +206,11 @@
           <!-- Testimonial 3 -->
           <div class="testimonial-card" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.08); animation: slideInUp 0.8s ease 0.5s both;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 16px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'">
             <div style="display: flex; margin-bottom: 1rem;">
-              <span style="color: #f59e0b; font-size: 1.2rem;">★ ★ ★ ★ ★</span>
+              <span style="color: #60a5fa; font-size: 1.2rem;">★ ★ ★ ★ ★</span>
             </div>
             <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-style: italic;">"As a parent, I love how safe and age-appropriate the content is. My kids are learning and having fun!"</p>
             <div style="display: flex; align-items: center;">
-              <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--warning), var(--error)); margin-right: 1rem;"></div>
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); margin-right: 1rem;"></div>
               <div>
                 <strong>Michael Chen</strong>
                 <div style="color: var(--text-muted); font-size: 0.9rem;">Parent & Educator</div>
@@ -311,93 +250,35 @@
       </div>
     </section>
 
-    <!-- Horizontal Scrolling Gallery Section -->
-    <section class="horizontal-scroll-section">
+    <!-- Community Gallery Section -->
+    <section class="slideshow-section">
       <div class="container">
-        <h2 style="text-align: center; margin-bottom: 1rem; margin-top: 2rem;">Our Community in Action</h2>
-        <p style="text-align: center; margin-bottom: 3rem; color: var(--text-secondary); font-size: 1.1rem;">
-          Join thousands of learners transforming their careers and achieving their goals
-        </p>
+        <h2 class="slideshow-title">Join thousands of learners transforming their careers and achieving their goals</h2>
+        <p class="slideshow-subtitle">A peek into the collaborative, high-impact learning community inside SmartEDU LMS.</p>
       </div>
-      
-      <div class="scroll-container">
-        <div class="scroll-track">
-          <!-- Image Cards -->
-          <div class="scroll-card image-card">
-            <img src="images/businessman-using-laptop-while-sitting-with-young-coworkers-conference-table-coworking-office.jpg" alt="Team collaboration">
-            <div class="card-overlay">
-              <p>Collaborative Learning Environment</p>
-            </div>
-          </div>
-          
-          <div class="scroll-card image-card">
-            <img src="images/creative-group-working-startup-using-laptops.jpg" alt="Creative startup team">
-            <div class="card-overlay">
-              <p>Build Real-World Projects</p>
-            </div>
-          </div>
-          
-          <div class="scroll-card image-card">
-            <img src="images/modern-equipped-computer-lab (1).jpg" alt="Modern computer lab">
-            <div class="card-overlay">
-              <p>State-of-the-Art Learning Tools</p>
-            </div>
-          </div>
-          
-          <div class="scroll-card image-card">
-            <img src="images/multiethnic-designers-sitting-together-working-laptops-coworking-space.jpg" alt="Designers collaborating">
-            <div class="card-overlay">
-              <p>Diverse & Inclusive Community</p>
-            </div>
-          </div>
-          
-          <div class="scroll-card image-card">
-            <img src="images/people-analyzing-checking-finance-graphs-office.jpg" alt="Data analysis team">
-            <div class="card-overlay">
-              <p>Master In-Demand Skills</p>
-            </div>
-          </div>
-          
-          <!-- Quote Cards -->
-          <div class="scroll-card quote-card">
-            <div class="quote-content">
-              <p class="quote-text">"SmartEDU transformed my career. I went from beginner to professional developer in just 6 months!"</p>
-              <p class="quote-author">— Sarah Chen, Full Stack Developer</p>
-            </div>
-          </div>
-          
-          <div class="scroll-card quote-card">
-            <div class="quote-content">
-              <p class="quote-text">"The AI tools and personalized learning paths make studying efficient and enjoyable."</p>
-              <p class="quote-author">— Marcus Johnson, Data Scientist</p>
-            </div>
-          </div>
-          
-          <div class="scroll-card quote-card">
-            <div class="quote-content">
-              <p class="quote-text">"Best learning platform I've used. The community support is incredible!"</p>
-              <p class="quote-author">— Lisa Rodriguez, Product Manager</p>
-            </div>
-          </div>
-          
-          <!-- Info Cards -->
-          <div class="scroll-card info-card">
-            <div class="info-content">
-              <h3>🎓 Our Mission</h3>
-              <p>To make world-class education accessible, affordable, and personalized for learners everywhere.</p>
-            </div>
-          </div>
-          
-          <div class="scroll-card info-card">
-            <div class="info-content">
-              <h3>💡 Why SmartEDU?</h3>
-              <p>Expert instructors, interactive lessons, AI-powered recommendations, and a supportive community of 500K+ learners.</p>
-            </div>
-          </div>
+
+      <div class="slideshow-shell">
+        <div id="galleryTrack" class="slideshow-track" aria-label="Learner gallery">
+          <article class="slideshow-card">
+            <img src="images/businessman-using-laptop-while-sitting-with-young-coworkers-conference-table-coworking-office.jpg" alt="Learners collaborating on laptops">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/creative-group-working-startup-using-laptops.jpg" alt="Creative team working together">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/modern-equipped-computer-lab (1).jpg" alt="Modern computer lab session">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/multiethnic-designers-sitting-together-working-laptops-coworking-space.jpg" alt="Designers collaborating in a workspace">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/people-analyzing-checking-finance-graphs-office.jpg" alt="Students analyzing data together">
+          </article>
+        </div>
+        <div class="slideshow-progress" aria-hidden="true">
+          <div id="galleryProgress" class="slideshow-progress-fill"></div>
         </div>
       </div>
-      
-      <p style="text-align: center; color: var(--text-muted); margin-top: 2rem; font-size: 0.9rem;">← Scroll horizontally to explore →</p>
     </section>
 
   </main>
@@ -406,14 +287,13 @@
     <div class="container">
       <div class="flex-between" style="margin-bottom: 2rem; flex-wrap: wrap; gap: 2rem;">
         <div>
-          <h4>SmartEDU</h4>
+          <h4>SmartEDU LMS</h4>
           <p style="margin-bottom: 0;">Making education safe and accessible for everyone.</p>
         </div>
         <div class="flex" style="gap: 2rem;">
           <div>
             <h5 style="margin-bottom: 1rem;">Product</h5>
             <a href="#" style="display: block; margin-bottom: 0.5rem;">Features</a>
-            <a href="#" style="display: block; margin-bottom: 0.5rem;">Pricing</a>
             <a href="#" style="display: block;">About</a>
           </div>
           <div>
@@ -425,7 +305,7 @@
         </div>
       </div>
       <div style="border-top: 1px solid var(--border); padding-top: 2rem; text-align: center;">
-        <p style="margin-bottom: 0; color: var(--text-muted);">© 2026 SmartEDU. All rights reserved.</p>
+        <p style="margin-bottom: 0; color: var(--text-muted);">© 2026 SmartEDU LMS (Learning Management Systems).</p>
       </div>
     </div>
   </footer>
@@ -433,3 +313,7 @@
   <script src="js/main.js"></script>
 </body>
 </html>
+
+
+
+

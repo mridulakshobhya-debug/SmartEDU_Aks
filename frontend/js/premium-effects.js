@@ -332,7 +332,7 @@ const createScrollProgressBar = () => {
     top: 0;
     left: 0;
     height: 3px;
-    background: linear-gradient(90deg, #1f5cf0, #6c5ce7);
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
     z-index: 1000;
     animation: gradientFlow 3s ease infinite;
   `;
