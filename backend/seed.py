@@ -1,5 +1,5 @@
 """
-Database seeding script - populates SmartEDU with sample data
+Database seeding script - populates SmartEDU LMS with sample data
 Run: python seed.py
 """
 
@@ -1668,7 +1668,7 @@ def main():
     app = create_app()
     
     with app.app_context():
-        print("\n[*] Seeding SmartEDU database...\n")
+        print("\n[*] Seeding SmartEDU LMS database...\n")
         
         # Clear existing data
         print("Clearing existing data...")

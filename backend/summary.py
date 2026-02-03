@@ -13,7 +13,7 @@ with app.app_context():
         subjects[lesson.subject][lesson.difficulty] += 1
     
     print("\n" + "="*60)
-    print("   SMARTEDU PLATFORM - COMPLETE COURSE LIBRARY 2026")
+    print("   SMARTEDU LMS PLATFORM - COMPLETE COURSE LIBRARY 2026")
     print("="*60 + "\n")
     
     for subj in sorted(subjects.keys()):

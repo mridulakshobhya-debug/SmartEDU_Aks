@@ -241,7 +241,7 @@ A: System still works with fallback analysis
 ✅ All processing is temporary  
 ✅ Content not shared anywhere  
 ✅ Secure HTTPS recommended  
-✅ Same security as other SmartEDU features  
+✅ Same security as other SmartEDU LMS features  
 
 ---
 

@@ -174,9 +174,8 @@ Format: List each book with title, author, and why it's good for them."""
 
 def ai_chat(age, user_message, conversation_history=None):
     """
-    Conversational AI chat with context awareness
-    Uses conversation history for more intelligent responses
-    Falls back to friendly responses if API unavailable
+    Conversational AI chat with context awareness.
+    Uses Groq for general Q&A and SmartEDU LMS support.
     """
     from config import Config
     
@@ -189,7 +188,12 @@ def ai_chat(age, user_message, conversation_history=None):
     messages = [
         {
             "role": "system",
-            "content": f"You are a helpful librarian and learning assistant for a {age}-year-old. Help them find books and provide reading recommendations. Be friendly, encouraging, and age-appropriate."
+            "content": (
+                "You are SmartEDU LMS's AI assistant. Answer any question clearly and helpfully. "
+                "If the user asks about learning, provide actionable steps and resources. "
+                "If a question is ambiguous, ask a brief clarifying question. "
+                "Keep responses concise but complete."
+            )
         }
     ]
     
@@ -208,20 +212,8 @@ def ai_chat(age, user_message, conversation_history=None):
     
     # If no API key or invalid, use fallback
     if not api_key or api_key == "gsk_YOUR_GROQ_API_KEY_HERE" or api_key == "your_groq_api_key_here":
-        logger.info("No valid Groq API key, using fallback response")
-        # Simple fallback responses for common messages
-        user_msg_lower = user_message.lower().strip()
-        
-        if any(word in user_msg_lower for word in ['hi', 'hello', 'hey', 'greetings']):
-            return f"Hello! 👋 I'm SmartEDU's AI Assistant. I'm here to help you find great books and answer your learning questions. What would you like to know about?"
-        elif any(word in user_msg_lower for word in ['how are you', 'how are u']):
-            return "I'm doing great, thanks for asking! 😊 I'm ready to help you discover new books and answer your learning questions. What can I assist you with?"
-        elif any(word in user_msg_lower for word in ['book', 'recommend', 'suggest']):
-            return recommend(age, "fiction")
-        elif any(word in user_msg_lower for word in ['help', 'what can']):
-            return "I can help you with:\n\n📚 **Book Recommendations** - Just tell me what you're interested in!\n💡 **Learning Tips** - Ask for advice on any subject\n🎓 **Study Suggestions** - I can suggest resources\n\nWhat would you like help with?"
-        else:
-            return f"That's an interesting question! While I don't have access to advanced AI right now, I'm happy to help. You might enjoy exploring our eLearning courses or asking me for book recommendations. What interests you?"
+        logger.info("No valid Groq API key, chatbot is not configured")
+        return "The AI assistant is not configured yet. Please set GROQ_API_KEY in your .env file and try again."
     
     try:
         headers = {
@@ -255,8 +247,8 @@ def ai_chat(age, user_message, conversation_history=None):
     except Exception as e:
         logger.error(f"Unexpected error in ai_chat: {str(e)}")
     
-    # Fallback to friendly response
-    return "I'm having trouble connecting to my advanced AI features right now, but I'm still here to help! Ask me about books, learning tips, or our courses!"
+    # Fallback if API call fails
+    return "The AI assistant is temporarily unavailable. Please check your GROQ_API_KEY and try again."
 
 
 def generate_worksheet(subject, difficulty, num_questions=10, question_type="Mixed", topic=""):
@@ -370,7 +362,11 @@ def generate_fallback_worksheet(subject, difficulty, num_questions, question_typ
     templates = question_templates.get(difficulty, question_templates["Intermediate"])
     topic_text = topic or subject
     
-    for i in range(1, min(num_questions + 1, 11)):
+    # Cap to a reasonable maximum to avoid overly large responses
+    max_questions = 50
+    total_questions = min(num_questions, max_questions)
+
+    for i in range(1, total_questions + 1):
         template = templates[(i - 1) % len(templates)]
         question = template.format(topic_or_subject=topic_text)
         html += f"""
@@ -641,4 +637,100 @@ The provided content appears to be educational material related to {' '.join(con
 """
     
     return fallback_text
+
+
+def generate_project_feedback(project_title, submission, difficulty="intermediate", repo=""):
+    """
+    Generate feedback for a guided project submission.
+    Returns actionable feedback with strengths, improvements, and next steps.
+    """
+    from config import Config
+
+    api_key = Config.GROQ_API_KEY
+
+    if not api_key or api_key == "your_groq_api_key_here" or api_key == "gsk_YOUR_GROQ_API_KEY_HERE":
+        logger.warning("No Groq API key provided for project feedback")
+        return generate_fallback_project_feedback(project_title, submission, difficulty, repo)
+
+    try:
+        prompt = f"""You are a senior instructor providing feedback on a learner project.
+Project: {project_title}
+Difficulty: {difficulty}
+Repo link (optional): {repo or 'N/A'}
+
+Submission:
+{submission}
+
+Provide structured feedback with the following sections:
+1. Summary (2-3 sentences)
+2. Strengths (3 bullets)
+3. Improvements (3 bullets)
+4. Next Steps (3 bullets)
+5. Score (1-5) with a short reason
+
+Be supportive, specific, and actionable."""
+
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers=headers,
+            json={
+                "model": "llama-3.1-8b-instant",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an expert software instructor and coach. Give clear, actionable feedback."
+                    },
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.6,
+                "max_tokens": 900
+            },
+            timeout=30
+        )
+
+        if response.status_code == 200:
+            result = response.json()
+            reply = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+            if reply:
+                return reply
+        else:
+            logger.warning(f"Groq API error: {response.status_code}")
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"API request failed: {str(e)}")
+    except Exception as e:
+        logger.error(f"Unexpected error in generate_project_feedback: {str(e)}")
+
+    return generate_fallback_project_feedback(project_title, submission, difficulty, repo)
+
+
+def generate_fallback_project_feedback(project_title, submission, difficulty="intermediate", repo=""):
+    """Fallback feedback when AI service is unavailable."""
+    snippet = submission[:300].strip().replace("\n", " ")
+    return f"""Project Feedback: {project_title}
+
+Summary:
+You submitted a project at the {difficulty} level. Your response includes: {snippet if snippet else 'a project description'}.
+
+Strengths:
+- You provided a clear submission outline.
+- You documented key parts of your approach.
+- You shared enough detail to review your work.
+
+Improvements:
+- Add more concrete examples or code snippets.
+- Explain why you made specific decisions.
+- Include screenshots or outputs where possible.
+
+Next Steps:
+- Refine the project based on the improvement list.
+- Test your solution with edge cases.
+- Add a short README explaining setup and usage.
+
+Score: 3/5 (Good progress; add more evidence and detail for a stronger submission.)"""
 

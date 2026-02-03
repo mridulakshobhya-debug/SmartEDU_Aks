@@ -1,6 +1,6 @@
-// main.js - SmartEDU Frontend Core Initialization
+// main.js - SmartEDU LMS Frontend Core Initialization
 
-console.log('🎓 SmartEDU Application Starting...');
+console.log('🎓 SmartEDU LMS Application Starting...');
 
 /**
  * Theme Management System
@@ -131,6 +131,225 @@ function setupSmoothScroll() {
 }
 
 /**
+ * Community gallery slider with progress bar
+ */
+function initGallerySlider() {
+  const track = document.getElementById('galleryTrack');
+  const progress = document.getElementById('galleryProgress');
+  const shell = document.querySelector('.slideshow-shell');
+  if (!track || !progress || !shell) return;
+
+  const updateProgress = () => {
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const percent = maxScroll > 0 ? (track.scrollLeft / maxScroll) * 100 : 0;
+    progress.style.width = `${percent}%`;
+  };
+
+  const step = () => track.clientWidth * 0.85;
+
+  const scrollByStep = (dir) => {
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 0) return;
+    let next = track.scrollLeft + (dir * step());
+    if (next < 0) next = 0;
+    if (next > maxScroll) next = maxScroll;
+    track.scrollTo({ left: next, behavior: 'smooth' });
+  };
+
+  const controls = document.createElement('div');
+  controls.className = 'slideshow-controls';
+  controls.innerHTML = `
+    <button class="slideshow-btn" id="galleryPrev" aria-label="Previous slide">&#8592;</button>
+    <button class="slideshow-btn" id="galleryNext" aria-label="Next slide">&#8594;</button>
+    <button class="slideshow-btn" id="galleryToggle" aria-label="Pause autoplay">&#10074;&#10074;</button>
+  `;
+  shell.appendChild(controls);
+
+  const prevBtn = document.getElementById('galleryPrev');
+  const nextBtn = document.getElementById('galleryNext');
+  const toggleBtn = document.getElementById('galleryToggle');
+
+  let paused = false;
+
+  const updateToggle = () => {
+    if (!toggleBtn) return;
+    toggleBtn.innerHTML = paused ? '&#9654;' : '&#10074;&#10074;';
+  };
+
+  if (prevBtn) prevBtn.addEventListener('click', () => {
+    paused = true;
+    updateToggle();
+    scrollByStep(-1);
+  });
+
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+    paused = true;
+    updateToggle();
+    scrollByStep(1);
+  });
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      paused = !paused;
+      updateToggle();
+    });
+  }
+
+  const autoScroll = () => {
+    if (paused) return;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 0) return;
+    const next = track.scrollLeft + step();
+    track.scrollTo({ left: next >= maxScroll ? 0 : next, behavior: 'smooth' });
+  };
+
+  let autoTimer = setInterval(autoScroll, 5500);
+
+  track.addEventListener('scroll', () => {
+    window.requestAnimationFrame(updateProgress);
+  });
+
+  shell.addEventListener('mouseenter', () => {
+    paused = true;
+    updateToggle();
+  });
+
+  shell.addEventListener('mouseleave', () => {
+    paused = false;
+    updateToggle();
+  });
+
+  window.addEventListener('resize', updateProgress);
+  updateToggle();
+  updateProgress();
+}
+
+
+/**
+ * Auth prompt for login/signup
+ */
+function initAuthPrompt() {
+  const currentPath = window.location.pathname.toLowerCase();
+  if (currentPath.includes('login.html') || currentPath.includes('signup.html')) {
+    return;
+  }
+
+  let prompt = document.getElementById('authPrompt');
+  if (!prompt) {
+    prompt = document.createElement('div');
+    prompt.id = 'authPrompt';
+    prompt.className = 'auth-prompt';
+    prompt.setAttribute('aria-hidden', 'true');
+    prompt.innerHTML = `
+      <div class="auth-prompt-card" role="dialog" aria-modal="true" aria-labelledby="authPromptTitle">
+        <button class="auth-prompt-close" type="button" aria-label="Close" data-auth-close>×</button>
+        <h3 id="authPromptTitle">Welcome to SmartEDU LMS</h3>
+        <p>Log in or create an account to save progress, access AI tools, and track certificates.</p>
+        <div class="auth-prompt-actions">
+          <a href="login.html" class="btn btn-primary">Log In</a>
+          <a href="signup.html" class="btn btn-outline">Sign Up</a>
+        </div>
+        <button class="auth-prompt-skip" type="button" data-auth-close>Continue as guest</button>
+      </div>
+    `;
+    document.body.appendChild(prompt);
+  }
+
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) return;
+
+  if (sessionStorage.getItem('auth_prompt_dismissed') === '1') return;
+
+  prompt.classList.add('show');
+  prompt.setAttribute('aria-hidden', 'false');
+
+  const dismiss = () => {
+    prompt.classList.remove('show');
+    prompt.setAttribute('aria-hidden', 'true');
+    sessionStorage.setItem('auth_prompt_dismissed', '1');
+  };
+
+  prompt.querySelectorAll('[data-auth-close]').forEach(btn => {
+    btn.addEventListener('click', dismiss);
+  });
+
+  prompt.addEventListener('click', (event) => {
+    if (event.target === prompt) {
+      dismiss();
+    }
+  });
+}
+
+/**
+ * Navbar auth links (login/signup/logout)
+ */
+function initAuthNav() {
+  const navs = document.querySelectorAll('header nav');
+  if (!navs.length) return;
+
+  navs.forEach(nav => {
+    let login = nav.querySelector('a[href="login.html"]');
+    if (!login) {
+      login = document.createElement('a');
+      login.href = 'login.html';
+      login.textContent = 'Login';
+      nav.appendChild(login);
+    }
+    login.dataset.auth = 'login';
+    login.classList.add('auth-link', 'auth-login');
+
+    let signup = nav.querySelector('a[href="signup.html"]');
+    if (!signup) {
+      signup = document.createElement('a');
+      signup.href = 'signup.html';
+      signup.textContent = 'Sign Up';
+      signup.className = 'btn btn-primary';
+      signup.style.padding = '0.5rem 1rem';
+      nav.appendChild(signup);
+    }
+    signup.dataset.auth = 'signup';
+    signup.classList.add('auth-link');
+
+    let logout = nav.querySelector('[data-auth="logout"]');
+    if (!logout) {
+      logout = document.createElement('a');
+      logout.href = '#';
+      logout.textContent = 'Logout';
+      logout.className = 'btn btn-secondary';
+      logout.style.padding = '0.5rem 1rem';
+      logout.dataset.auth = 'logout';
+      nav.appendChild(logout);
+    }
+  });
+
+  updateAuthNav();
+}
+
+function updateAuthNav() {
+  const isAuthed = Boolean(localStorage.getItem('currentUser'));
+
+  document.querySelectorAll('[data-auth="login"]').forEach(link => {
+    link.classList.toggle('auth-hidden', isAuthed);
+  });
+
+  document.querySelectorAll('[data-auth="signup"]').forEach(link => {
+    link.classList.toggle('auth-hidden', isAuthed);
+  });
+
+  document.querySelectorAll('[data-auth="logout"]').forEach(link => {
+    link.classList.toggle('auth-hidden', !isAuthed);
+    if (!link.dataset.bound) {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      });
+      link.dataset.bound = 'true';
+    }
+  });
+}
+
+/**
  * Initialize all systems when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -142,8 +361,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Setup smooth scrolling
   setupSmoothScroll();
+
+  // Initialize gallery slider
+  initGallerySlider();
+
+  // Initialize auth prompt
+  initAuthPrompt();
+
+  // Initialize auth nav
+  initAuthNav();
   
-  console.log('✅ SmartEDU Frontend Fully Initialized');
+  console.log('✅ SmartEDU LMS Frontend Fully Initialized');
   console.log('💡 Tip: Press the theme toggle (🌙/☀️) in the header to switch themes');
 });
 
@@ -181,3 +409,4 @@ if (window.performance && window.performance.timing) {
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScrollEffect();
 });
+

@@ -1,7 +1,7 @@
 # 🎨 CSS Animation & Visual Effects Update
 
 ## Overview
-Enhanced the entire SmartEDU platform with **30+ premium animations** and **flashy visual effects** for a modern, engaging user experience.
+Enhanced the entire SmartEDU LMS platform with **30+ premium animations** and **flashy visual effects** for a modern, engaging user experience.
 
 ---
 
@@ -247,7 +247,7 @@ Animations maintain consistency across all breakpoints:
 
 ## 🎬 File Information
 
-**File**: `e:\SmartEDU\smartedu\frontend\css\style.css`
+**File**: `e:\SmartEDU LMS\smartedu\frontend\css\style.css`
 **Total Lines**: 1,871 (increased from ~1,207)
 **New Keyframes**: 26+
 **Enhanced Selectors**: 50+

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - SmartEDU</title>
+  <title>Login - SmartEDU LMS</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
     .auth-container {
@@ -131,18 +131,18 @@
     }
 
     .success-message {
-      background: #dcfce7;
-      color: #166534;
+      background: rgba(37, 99, 235, 0.12);
+      color: #1e40af;
       padding: 0.75rem;
       border-radius: var(--radius-md);
       margin-bottom: 1rem;
       display: none;
-      border-left: 4px solid #16a34a;
+      border-left: 4px solid var(--primary);
     }
 
     [data-theme="dark"] .success-message {
-      background: rgba(22, 163, 74, 0.1);
-      color: #86efac;
+      background: rgba(37, 99, 235, 0.2);
+      color: #bfdbfe;
     }
   </style>
 </head>
@@ -150,11 +150,12 @@
   <header>
     <div class="container">
       <div class="header-wrapper">
-        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU</h1>
+        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU LMS</h1>
         <nav>
           <a href="index.html">Home</a>
           <a href="elearning.html">eLearning</a>
           <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html">Admin</a>
         </nav>
         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
           <span id="themeIcon">🌙</span>
@@ -168,8 +169,15 @@
       <div class="auth-card">
         <div class="auth-header">
           <h2>Welcome Back</h2>
-          <p>Login to your SmartEDU account</p>
+          <p>Login to your SmartEDU LMS account</p>
         </div>
+
+        <div class="auth-oauth">
+          <button type="button" class="oauth-btn"><span class="oauth-icon">G</span>Continue with Google</button>
+          <button type="button" class="oauth-btn"><span class="oauth-icon">GH</span>Continue with GitHub</button>
+          <button type="button" class="oauth-btn"><span class="oauth-icon"></span>Continue with Apple</button>
+        </div>
+        <div class="auth-divider"><span>or</span></div>
 
         <div class="error-message" id="errorMsg"></div>
         <div class="success-message" id="successMsg"></div>
@@ -209,7 +217,7 @@
 
   <footer>
     <div class="container text-center">
-      <p style="color: var(--text-muted);">© 2026 SmartEDU - Learning Made Safe & Fun</p>
+      <p style="color: var(--text-muted);">© 2026 SmartEDU LMS (Learning Management Systems)</p>
     </div>
   </footer>
 

@@ -8,24 +8,24 @@ class HeroSlideshow {
     this.isTransitioning = false;
     this.slides = [
       {
-        image: '/images/businessman-using-laptop-while-sitting-with-young-coworkers-conference-table-coworking-office.jpg',
-        fallbackColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        image: 'images/businessman-using-laptop-while-sitting-with-young-coworkers-conference-table-coworking-office.jpg',
+        fallbackColor: '#1e40af'
       },
       {
-        image: '/images/creative-group-working-startup-using-laptops.jpg',
-        fallbackColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+        image: 'images/creative-group-working-startup-using-laptops.jpg',
+        fallbackColor: '#1d4ed8'
       },
       {
-        image: '/images/modern-equipped-computer-lab (1).jpg',
-        fallbackColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+        image: 'images/modern-equipped-computer-lab (1).jpg',
+        fallbackColor: '#0ea5e9'
       },
       {
-        image: '/images/multiethnic-designers-sitting-together-working-laptops-coworking-space.jpg',
-        fallbackColor: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+        image: 'images/multiethnic-designers-sitting-together-working-laptops-coworking-space.jpg',
+        fallbackColor: '#2563eb'
       },
       {
-        image: '/images/people-analyzing-checking-finance-graphs-office.jpg',
-        fallbackColor: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+        image: 'images/people-analyzing-checking-finance-graphs-office.jpg',
+        fallbackColor: '#60a5fa'
       }
     ];
     this.autoPlayInterval = null;
@@ -51,7 +51,6 @@ class HeroSlideshow {
       // Try to load image, fallback to gradient
       slideElement.style.backgroundImage = `url('${slide.image}')`;
       slideElement.style.backgroundColor = slide.fallbackColor;
-      slideElement.style.backgroundBlendMode = 'overlay';
 
       container.appendChild(slideElement);
     });
@@ -72,14 +71,14 @@ class HeroSlideshow {
 
   showSlide(index, direction = 'next') {
     if (this.isTransitioning) return;
-    
+
     const slides = document.querySelectorAll('.hero-slide');
     const dots = document.querySelectorAll('.slide-dot');
 
     // Add transition class based on direction
     slides.forEach((slide, i) => {
       slide.classList.remove('active', 'slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right');
-      
+
       if (i === this.currentSlide) {
         // Outgoing slide
         if (direction === 'next') {
@@ -88,7 +87,7 @@ class HeroSlideshow {
           slide.classList.add('slide-out-right');
         }
       }
-      
+
       if (i === index) {
         // Incoming slide
         if (direction === 'next') {
@@ -109,7 +108,7 @@ class HeroSlideshow {
 
     this.currentSlide = index;
     this.isTransitioning = true;
-    
+
     setTimeout(() => {
       this.isTransitioning = false;
     }, 1000);
