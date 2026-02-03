@@ -7,6 +7,81 @@ const AdminState = {
 const DRAFT_KEY = 'smartedu_admin_lesson_draft';
 const FLAG_KEY = 'smartedu_admin_flags';
 
+function initAdminAuthNav() {
+  const nav = document.querySelector('header nav');
+  if (!nav) return;
+
+  let login = nav.querySelector('a[href="login.html"]');
+  if (!login) {
+    login = document.createElement('a');
+    login.href = 'login.html';
+    login.textContent = 'Login';
+    nav.appendChild(login);
+  }
+  login.dataset.auth = 'login';
+  login.classList.add('auth-link', 'auth-login');
+
+  let signup = nav.querySelector('a[href="signup.html"]');
+  if (!signup) {
+    signup = document.createElement('a');
+    signup.href = 'signup.html';
+    signup.textContent = 'Sign Up';
+    signup.className = 'btn btn-primary';
+    signup.style.padding = '0.5rem 1rem';
+    nav.appendChild(signup);
+  }
+  signup.dataset.auth = 'signup';
+  signup.classList.add('auth-link');
+
+  let logout = nav.querySelector('[data-auth="logout"]');
+  if (!logout) {
+    logout = document.createElement('a');
+    logout.href = '#';
+    logout.textContent = 'Logout';
+    logout.className = 'btn btn-secondary';
+    logout.style.padding = '0.5rem 1rem';
+    logout.dataset.auth = 'logout';
+    nav.appendChild(logout);
+  }
+
+  const isAuthed = Boolean(localStorage.getItem('currentUser'));
+  nav.querySelectorAll('[data-auth="login"]').forEach(link => link.classList.toggle('auth-hidden', isAuthed));
+  nav.querySelectorAll('[data-auth="signup"]').forEach(link => link.classList.toggle('auth-hidden', isAuthed));
+  nav.querySelectorAll('[data-auth="logout"]').forEach(link => {
+    link.classList.toggle('auth-hidden', !isAuthed);
+    if (!link.dataset.bound) {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      });
+      link.dataset.bound = 'true';
+    }
+  });
+}
+
+function enforceAdminAccess() {
+  const gate = document.getElementById('adminAccessGate');
+  const shell = document.querySelector('.admin-shell');
+  const currentUser = localStorage.getItem('currentUser');
+
+  if (!currentUser) {
+    if (shell) shell.classList.add('locked');
+    if (gate) {
+      gate.classList.add('show');
+      gate.setAttribute('aria-hidden', 'false');
+    }
+    return false;
+  }
+
+  if (shell) shell.classList.remove('locked');
+  if (gate) {
+    gate.classList.remove('show');
+    gate.setAttribute('aria-hidden', 'true');
+  }
+  return true;
+}
+
 function scrollToSection(id) {
   const target = document.getElementById(id);
   if (target) {
@@ -341,6 +416,9 @@ function renderQualityQueue(items) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initAdminAuthNav();
+  if (!enforceAdminAccess()) return;
+
   const form = document.getElementById('lessonForm');
   if (form) form.addEventListener('submit', handleLessonSubmit);
 

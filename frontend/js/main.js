@@ -224,6 +224,131 @@ function initGallerySlider() {
   updateProgress();
 }
 
+
+/**
+ * Auth prompt for login/signup
+ */
+function initAuthPrompt() {
+  const currentPath = window.location.pathname.toLowerCase();
+  if (currentPath.includes('login.html') || currentPath.includes('signup.html')) {
+    return;
+  }
+
+  let prompt = document.getElementById('authPrompt');
+  if (!prompt) {
+    prompt = document.createElement('div');
+    prompt.id = 'authPrompt';
+    prompt.className = 'auth-prompt';
+    prompt.setAttribute('aria-hidden', 'true');
+    prompt.innerHTML = `
+      <div class="auth-prompt-card" role="dialog" aria-modal="true" aria-labelledby="authPromptTitle">
+        <button class="auth-prompt-close" type="button" aria-label="Close" data-auth-close>×</button>
+        <h3 id="authPromptTitle">Welcome to SmartEDU LMS</h3>
+        <p>Log in or create an account to save progress, access AI tools, and track certificates.</p>
+        <div class="auth-prompt-actions">
+          <a href="login.html" class="btn btn-primary">Log In</a>
+          <a href="signup.html" class="btn btn-outline">Sign Up</a>
+        </div>
+        <button class="auth-prompt-skip" type="button" data-auth-close>Continue as guest</button>
+      </div>
+    `;
+    document.body.appendChild(prompt);
+  }
+
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) return;
+
+  if (sessionStorage.getItem('auth_prompt_dismissed') === '1') return;
+
+  prompt.classList.add('show');
+  prompt.setAttribute('aria-hidden', 'false');
+
+  const dismiss = () => {
+    prompt.classList.remove('show');
+    prompt.setAttribute('aria-hidden', 'true');
+    sessionStorage.setItem('auth_prompt_dismissed', '1');
+  };
+
+  prompt.querySelectorAll('[data-auth-close]').forEach(btn => {
+    btn.addEventListener('click', dismiss);
+  });
+
+  prompt.addEventListener('click', (event) => {
+    if (event.target === prompt) {
+      dismiss();
+    }
+  });
+}
+
+/**
+ * Navbar auth links (login/signup/logout)
+ */
+function initAuthNav() {
+  const navs = document.querySelectorAll('header nav');
+  if (!navs.length) return;
+
+  navs.forEach(nav => {
+    let login = nav.querySelector('a[href="login.html"]');
+    if (!login) {
+      login = document.createElement('a');
+      login.href = 'login.html';
+      login.textContent = 'Login';
+      nav.appendChild(login);
+    }
+    login.dataset.auth = 'login';
+    login.classList.add('auth-link', 'auth-login');
+
+    let signup = nav.querySelector('a[href="signup.html"]');
+    if (!signup) {
+      signup = document.createElement('a');
+      signup.href = 'signup.html';
+      signup.textContent = 'Sign Up';
+      signup.className = 'btn btn-primary';
+      signup.style.padding = '0.5rem 1rem';
+      nav.appendChild(signup);
+    }
+    signup.dataset.auth = 'signup';
+    signup.classList.add('auth-link');
+
+    let logout = nav.querySelector('[data-auth="logout"]');
+    if (!logout) {
+      logout = document.createElement('a');
+      logout.href = '#';
+      logout.textContent = 'Logout';
+      logout.className = 'btn btn-secondary';
+      logout.style.padding = '0.5rem 1rem';
+      logout.dataset.auth = 'logout';
+      nav.appendChild(logout);
+    }
+  });
+
+  updateAuthNav();
+}
+
+function updateAuthNav() {
+  const isAuthed = Boolean(localStorage.getItem('currentUser'));
+
+  document.querySelectorAll('[data-auth="login"]').forEach(link => {
+    link.classList.toggle('auth-hidden', isAuthed);
+  });
+
+  document.querySelectorAll('[data-auth="signup"]').forEach(link => {
+    link.classList.toggle('auth-hidden', isAuthed);
+  });
+
+  document.querySelectorAll('[data-auth="logout"]').forEach(link => {
+    link.classList.toggle('auth-hidden', !isAuthed);
+    if (!link.dataset.bound) {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      });
+      link.dataset.bound = 'true';
+    }
+  });
+}
+
 /**
  * Initialize all systems when DOM is ready
  */
@@ -239,6 +364,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize gallery slider
   initGallerySlider();
+
+  // Initialize auth prompt
+  initAuthPrompt();
+
+  // Initialize auth nav
+  initAuthNav();
   
   console.log('✅ SmartEDU LMS Frontend Fully Initialized');
   console.log('💡 Tip: Press the theme toggle (🌙/☀️) in the header to switch themes');

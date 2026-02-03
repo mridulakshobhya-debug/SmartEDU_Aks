@@ -162,9 +162,9 @@ function renderPaths(paths) {
           }).join('')}
           ${path.lessons.length > modulePreview.length ? `<div class="module-item">+ ${path.lessons.length - modulePreview.length} more lessons</div>` : ''}
         </div>
-        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem;">
-          <button class="btn btn-primary" style="flex: 1;" onclick="startPath('${path.id}')">${isActive ? 'Active Path' : 'Start Path'}</button>
-          <button class="btn btn-secondary" style="flex: 1;" onclick="viewPath('${path.id}')">View Path</button>
+        <div class="path-actions">
+          <button class="btn btn-primary" onclick="startPath('${path.id}')">${isActive ? 'Active Path' : 'Start Path'}</button>
+          <button class="btn btn-secondary" onclick="viewPath('${path.id}')">View Path</button>
         </div>
       </div>
     `;
@@ -203,26 +203,27 @@ function renderProjects(projects) {
         <div class="project-header">
           <div>
             <div class="project-level">${project.difficulty}</div>
-            <h4 style="margin: 0.5rem 0;">${project.title}</h4>
+            <h4 class="project-title">${project.title}</h4>
           </div>
           <span class="status-chip ${statusClass}">${status}</span>
         </div>
-        <p style="margin: 0.5rem 0 1rem; color: var(--text-secondary);">${project.summary}</p>
+        <p class="project-summary">${project.summary}</p>
         <div class="project-meta">
           <span>${project.subject}</span>
           <span>${project.duration}</span>
           <span>${lessonLabel}</span>
         </div>
         <div class="project-tags">
-          ${skills.map(skill => `<span class="project-tag">${skill}</span>`).join('')}
+          ${skills.slice(0, 2).map(skill => `<span class="project-tag">${skill}</span>`).join('')}
+          ${skills.length > 2 ? `<span class="project-tag muted">+${skills.length - 2} more</span>` : ''}
         </div>
         <div class="project-steps">
           ${steps.slice(0, 3).map(step => `<div class="project-step">- ${step}</div>`).join('')}
           ${steps.length > 3 ? `<div class="project-step">+ ${steps.length - 3} more steps</div>` : ''}
         </div>
-        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem;">
-          <button class="btn btn-primary" style="flex: 1;" onclick="startProject('${project.id}')" ${project.lessonId ? '' : 'disabled'}>Start Project</button>
-          <button class="btn btn-secondary" style="flex: 1;" onclick="viewProjectDetails('${project.id}')">View Details</button>
+        <div class="project-actions">
+          <button class="btn btn-primary" onclick="startProject('${project.id}')" ${project.lessonId ? '' : 'disabled'}>Start Project</button>
+          <button class="btn btn-secondary" onclick="viewProjectDetails('${project.id}')">View Details</button>
         </div>
       </div>
     `;
