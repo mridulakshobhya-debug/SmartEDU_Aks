@@ -158,14 +158,19 @@ async function seedDatabase() {
   setSeedStatus('Seeding database...', 'success');
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 25000);
+
     const response = await fetch('/api/admin/seed', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-Seed-Token': token
       },
-      body: JSON.stringify({ reset })
+      body: JSON.stringify({ reset }),
+      signal: controller.signal
     });
+    clearTimeout(timeout);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'Seed failed');
 
@@ -173,7 +178,10 @@ async function seedDatabase() {
     setSeedStatus('Database seeded successfully.', 'success');
     await refreshAdminData();
   } catch (error) {
-    setSeedStatus(`Seed failed: ${error.message}`, 'error');
+    const message = error.name === 'AbortError'
+      ? 'Seed timed out. If on Vercel Hobby, seed locally or upgrade plan.'
+      : `Seed failed: ${error.message}`;
+    setSeedStatus(message, 'error');
   }
 }
 
