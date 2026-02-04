@@ -26,17 +26,17 @@ smartedu/
 │   ├── routes/                # API endpoints
 │   └── services/              # Business logic
 │
-└── frontend/                  # HTML/CSS/JS frontend
+└── public/                   # Static frontend (Vercel)
     ├── index.html             # Home page
     ├── elearning.html         # Learning section
-    ├── elibrary.html          # Book library & AI chatbot
+    ├── ai-tools.html          # AI tools
+    ├── chatbot.html           # AI chatbot
     ├── css/
-    │   └── style.css          # Professional styling
+    │   └── style.css          # Styling
     └── js/
         ├── main.js            # App initialization
         ├── elearning.js       # Lesson loading logic
-        ├── chatbot.js         # AI recommendation UI
-        └── elibrary.js        # Book management
+        └── chatbot.js         # AI recommendation UI
 ```
 
 ## 🚀 Quick Start
@@ -212,16 +212,28 @@ python app.py
 
 ## 🚀 Deployment
 
-### Development
+### Local Development
 ```bash
-python app.py
+python backend/app.py
 ```
 
-### Production
-```bash
-export FLASK_ENV=production
-export FLASK_DEBUG=False
-gunicorn wsgi:app
+### Vercel (Recommended)
+1. Push your repo to GitHub/GitLab.
+2. Create a new Vercel project and import the repo.
+3. Set Environment Variables in Vercel:
+   - `GROQ_API_KEY` (required for AI features)
+   - `SECRET_KEY` (required)
+   - `DATABASE_URL` (Neon/Supabase Postgres connection string)
+   - `CORS_ORIGINS` (e.g. `https://your-app.vercel.app`)
+   - `SEED_TOKEN` (used to protect `/api/admin/seed`)
+4. Deploy.
+
+#### Optional: Seed demo data
+Send a POST request (replace `<token>`):
+```
+POST https://your-app.vercel.app/api/admin/seed
+Headers: X-Seed-Token: <token>
+Body: { "reset": true }
 ```
 
 ## 📊 Project Statistics

@@ -1642,7 +1642,7 @@ def seed_lessons():
     print(f"[+] Added {len(lessons_data)} comprehensive lessons")
 
 
-def seed_users():
+def seed_users(clear_existing=True):
     """Add sample users to database"""
     users_data = [
         {"username": "student_10", "email": "student10@smartedu.com", "age": 10, "full_name": "Student 10"},
@@ -1651,8 +1651,9 @@ def seed_users():
         {"username": "student_16", "email": "student16@smartedu.com", "age": 16, "full_name": "Student 16"},
     ]
     
-    # Clear existing users
-    User.query.delete()
+    # Clear existing users (optional)
+    if clear_existing:
+        User.query.delete()
     
     for user_data in users_data:
         user = User(**user_data)
@@ -1663,61 +1664,69 @@ def seed_users():
     db.session.commit()
 
 
+def seed_all(reset_db=True, clear_users=True):
+    """Seed books, lessons, and users. Expects an active app context."""
+    if reset_db:
+        print("Clearing existing data...")
+        db.drop_all()
+
+    db.create_all()
+
+    print("\nAdding books...")
+    seed_books()
+
+    print("\nAdding lessons from seed files...")
+    print("  â†’ Python Basics...")
+    seed_python_basics_course()
+
+    print("  â†’ Python Advanced...")
+    seed_advanced_python_course()
+
+    print("  â†’ JavaScript...")
+    seed_javascript()
+
+    print("  â†’ JavaScript Advanced...")
+    seed_advanced_javascript()
+
+    print("  â†’ Web Development...")
+    seed_web_development()
+
+    print("  â†’ Web Development Advanced...")
+    seed_advanced_web_development()
+
+    print("  â†’ Computer Science...")
+    seed_computer_science()
+
+    print("  â†’ Computer Science Advanced...")
+    seed_advanced_computer_science()
+
+    print("  â†’ Artificial Intelligence...")
+    seed_artificial_intelligence()
+
+    print("  â†’ Artificial Intelligence Advanced...")
+    seed_advanced_artificial_intelligence()
+
+    print("\nAdding users...")
+    seed_users(clear_existing=clear_users)
+
+    total_lessons = Lesson.query.count()
+    print(f"\n[+] Database seeded successfully!")
+    print(f"[+] Total lessons in database: {total_lessons}\n")
+
+    return {
+        "lessons": total_lessons,
+        "books": Book.query.count(),
+        "users": User.query.count(),
+    }
+
+
 def main():
     """Initialize the database with sample data"""
     app = create_app()
-    
+
     with app.app_context():
         print("\n[*] Seeding SmartEDU LMS database...\n")
-        
-        # Clear existing data
-        print("Clearing existing data...")
-        db.drop_all()
-        db.create_all()
-        
-        print("\nAdding books...")
-        seed_books()
-        
-        print("\nAdding lessons from seed files...")
-        # Call all individual seed functions
-        print("  → Python Basics...")
-        seed_python_basics_course()
-        
-        print("  → Python Advanced...")
-        seed_advanced_python_course()
-        
-        print("  → JavaScript...")
-        seed_javascript()
-        
-        print("  → JavaScript Advanced...")
-        seed_advanced_javascript()
-        
-        print("  → Web Development...")
-        seed_web_development()
-        
-        print("  → Web Development Advanced...")
-        seed_advanced_web_development()
-        
-        print("  → Computer Science...")
-        seed_computer_science()
-        
-        print("  → Computer Science Advanced...")
-        seed_advanced_computer_science()
-        
-        print("  → Artificial Intelligence...")
-        seed_artificial_intelligence()
-        
-        print("  → Artificial Intelligence Advanced...")
-        seed_advanced_artificial_intelligence()
-        
-        print("\nAdding users...")
-        seed_users()
-        
-        # Count total lessons
-        total_lessons = Lesson.query.count()
-        print(f"\n[+] Database seeded successfully!")
-        print(f"[+] Total lessons in database: {total_lessons}\n")
-
+        seed_all(reset_db=True, clear_users=True)
 
 if __name__ == "__main__":
     main()

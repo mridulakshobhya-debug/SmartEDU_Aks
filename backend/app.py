@@ -1,7 +1,8 @@
-from flask import Flask, send_file
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 import os
 import sys
+import tempfile
 
 # Add backend to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -19,22 +20,38 @@ from routes.admin_routes import bp as admin_bp
 def create_app(config_name=None):
     """Create and configure Flask application"""
     if config_name is None:
-        config_name = os.getenv("FLASK_ENV", "development")
+        config_name = os.getenv("FLASK_ENV") or ("production" if os.getenv("VERCEL") else "development")
     
-    # Create instance folder if it doesn't exist
-    instance_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'instance')
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # Create instance folder if it doesn't exist (Vercel filesystem is read-only except /tmp)
+    instance_path = (
+        os.path.join(tempfile.gettempdir(), "smartedu_instance")
+        if os.getenv("VERCEL")
+        else os.path.join(project_root, "instance")
+    )
     os.makedirs(instance_path, exist_ok=True)
     
-    app = Flask(__name__, static_folder="../frontend", static_url_path="/", instance_path=instance_path)
+    static_folder = os.path.join(project_root, "public")
+    app = Flask(__name__, static_folder=static_folder, static_url_path="/", instance_path=instance_path)
     app.config.from_object(config_by_name.get(config_name, config_by_name["development"]))
     
-    # Initialize CORS - allow all origins for development
-    CORS(app, 
-         resources={r"/api/*": {
-            "methods": ["GET", "POST", "PUT", "DELETE"],
-            "allow_headers": ["Content-Type"]
-        }},
-         supports_credentials=True)
+    # Initialize CORS
+    cors_origins = app.config.get("CORS_ORIGINS", "*")
+    if isinstance(cors_origins, str):
+        cors_origins = [o.strip() for o in cors_origins.split(",") if o.strip()] or "*"
+    supports_credentials = False if cors_origins == "*" else True
+    CORS(
+        app,
+        resources={
+            r"/api/*": {
+                "origins": cors_origins,
+                "methods": ["GET", "POST", "PUT", "DELETE"],
+                "allow_headers": ["Content-Type", "Authorization"],
+            }
+        },
+        supports_credentials=supports_credentials,
+    )
     
     # Initialize database BEFORE importing routes
     db.init_app(app)
@@ -57,19 +74,21 @@ def create_app(config_name=None):
     # Routes
     @app.route("/")
     def home():
-        return send_file("../frontend/index.html")
+        return send_from_directory(app.static_folder, "index.html")
     
     @app.route("/elearning.html")
     def elearning():
-        return send_file("../frontend/elearning.html")
+        return send_from_directory(app.static_folder, "elearning.html")
     
     @app.route("/ai-tools.html")
     def ai_tools():
-        return send_file("../frontend/ai-tools.html")
+        return send_from_directory(app.static_folder, "ai-tools.html")
 
     @app.route("/admin.html")
     def admin():
-        return send_file("../frontend/admin.html")
+        return send_from_directory(app.static_folder, "admin.html")
+
+    @app.errorhandler(404)
     def not_found(error):
         return {"error": "Route not found"}, 404
     

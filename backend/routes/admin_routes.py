@@ -6,6 +6,7 @@ from models.book import Book
 from models.user import User
 import json
 import logging
+import os
 
 bp = Blueprint("admin", __name__)
 logger = logging.getLogger(__name__)
@@ -32,6 +33,14 @@ def _parse_json_list(value):
         except json.JSONDecodeError:
             return []
     return []
+
+
+def _parse_bool(value, default=False):
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
 
 
 @bp.route("/admin/overview", methods=["GET"])
@@ -238,3 +247,32 @@ def quality_check():
     except Exception as e:
         logger.error(f"Quality check error: {str(e)}")
         return jsonify({"error": "Failed to run quality check", "details": str(e)}), 500
+
+
+@bp.route("/admin/seed", methods=["POST"])
+def seed_database():
+    """Seed database with demo content (protected by SEED_TOKEN)."""
+    expected = os.getenv("SEED_TOKEN")
+    if not expected:
+        return jsonify({"error": "SEED_TOKEN is not configured"}), 403
+
+    payload = request.get_json(silent=True) or {}
+    provided = (
+        request.headers.get("X-Seed-Token")
+        or request.args.get("token")
+        or payload.get("token")
+    )
+    if not provided or provided != expected:
+        return jsonify({"error": "Invalid seed token"}), 401
+
+    reset = _parse_bool(payload.get("reset", request.args.get("reset", True)), default=True)
+
+    try:
+        from seed import seed_all
+
+        result = seed_all(reset_db=reset, clear_users=reset)
+        return jsonify({"success": True, "reset": reset, "counts": result}), 200
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Seed database error: {str(e)}")
+        return jsonify({"error": "Failed to seed database", "details": str(e)}), 500

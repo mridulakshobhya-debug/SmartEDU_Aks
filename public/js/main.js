@@ -131,6 +131,89 @@ function setupSmoothScroll() {
 }
 
 /**
+ * Mobile navigation (hamburger) for small screens
+ */
+function initMobileNav() {
+  const headers = document.querySelectorAll('header');
+  if (!headers.length) return;
+
+  let backdrop = document.getElementById('mobileNavBackdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'mobileNavBackdrop';
+    backdrop.className = 'mobile-nav-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(backdrop);
+  }
+
+  const closeAll = () => {
+    headers.forEach(h => h.classList.remove('nav-open'));
+    document.querySelectorAll('.nav-toggle[aria-expanded="true"]').forEach(btn => {
+      btn.setAttribute('aria-expanded', 'false');
+    });
+    backdrop.classList.remove('show');
+  };
+
+  const openFor = (header, toggleButton) => {
+    closeAll();
+    header.classList.add('nav-open');
+    toggleButton.setAttribute('aria-expanded', 'true');
+    backdrop.classList.add('show');
+  };
+
+  headers.forEach((header, index) => {
+    const wrapper = header.querySelector('.header-wrapper');
+    const nav = header.querySelector('nav');
+    if (!wrapper || !nav) return;
+
+    if (!nav.id) nav.id = `siteNav_${index + 1}`;
+
+    let toggleButton = wrapper.querySelector('.nav-toggle');
+    if (!toggleButton) {
+      toggleButton = document.createElement('button');
+      toggleButton.type = 'button';
+      toggleButton.className = 'nav-toggle';
+      toggleButton.setAttribute('aria-controls', nav.id);
+      toggleButton.setAttribute('aria-expanded', 'false');
+      toggleButton.setAttribute('aria-label', 'Toggle navigation menu');
+      toggleButton.innerHTML = '<span aria-hidden="true">☰</span><span class="nav-toggle-label">Menu</span>';
+
+      const themeToggle = wrapper.querySelector('.theme-toggle');
+      if (themeToggle) {
+        wrapper.insertBefore(toggleButton, themeToggle);
+      } else {
+        wrapper.appendChild(toggleButton);
+      }
+    }
+
+    header.classList.add('has-mobile-nav');
+
+    toggleButton.addEventListener('click', () => {
+      const isOpen = header.classList.contains('nav-open');
+      if (isOpen) {
+        closeAll();
+      } else {
+        openFor(header, toggleButton);
+      }
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => closeAll());
+    });
+  });
+
+  backdrop.addEventListener('click', () => closeAll());
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeAll();
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) closeAll();
+  });
+}
+
+/**
  * Community gallery slider with progress bar
  */
 function initGallerySlider() {
@@ -361,6 +444,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Setup smooth scrolling
   setupSmoothScroll();
+
+  // Mobile nav menu
+  initMobileNav();
 
   // Initialize gallery slider
   initGallerySlider();

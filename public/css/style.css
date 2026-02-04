@@ -1695,6 +1695,34 @@ nav a:hover::after {
   transform: scale(1.1) rotate(20deg);
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);}
 
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  font-size: var(--text-base);
+  transition: all var(--transition-fast);
+  font-family: var(--font-body);
+  color: var(--text-primary);
+}
+
+.nav-toggle:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.35);
+}
+
+.nav-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--primary-light), 0 0 20px rgba(59, 130, 246, 0.35);
+}
+
 main {
   padding: var(--space-3xl) 0;
   animation: fadeIn 0.8s ease-out;
@@ -2554,10 +2582,52 @@ a:hover::before {
     grid-template-columns: 1fr;
   }
   
-  nav {
-    flex-direction: column;
+  .header-wrapper {
+    flex-wrap: wrap;
     gap: var(--space-md);
-    align-items: flex-end;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .theme-toggle {
+    padding: var(--space-sm);
+  }
+
+  nav {
+    order: 10;
+    flex: 0 0 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+
+  header.has-mobile-nav nav {
+    display: none;
+  }
+
+  header.has-mobile-nav.nav-open nav {
+    display: flex;
+  }
+
+  nav a:not(.btn) {
+    padding: 0.75rem 0.85rem;
+    font-size: var(--text-base);
+  }
+
+  nav a.btn {
+    width: 100%;
+    text-align: center;
   }
   
   .card {
@@ -2576,6 +2646,22 @@ a:hover::before {
   .hero-title {
     font-size: var(--text-3xl);
   }
+}
+
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+  z-index: 900;
+}
+
+.mobile-nav-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

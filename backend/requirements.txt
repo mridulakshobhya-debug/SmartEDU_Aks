@@ -5,3 +5,4 @@ python-dotenv
 requests
 python-docx
 PyPDF2
+psycopg2-binary
