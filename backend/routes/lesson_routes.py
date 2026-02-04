@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models.lesson import Lesson
+from services.seed_runner import ensure_seeded
 
 bp = Blueprint("lessons", __name__)
 
@@ -8,6 +9,8 @@ bp = Blueprint("lessons", __name__)
 def get_lessons():
     """Get lessons - no age requirement for inclusive access"""
     try:
+        ensure_seeded()
+
         subject = request.args.get("subject", type=str)
         difficulty = request.args.get("difficulty", type=str)
         

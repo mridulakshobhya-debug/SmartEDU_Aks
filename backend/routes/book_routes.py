@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models.book import Book
 from services.age_guard import allowed
+from services.seed_runner import ensure_seeded
 
 bp = Blueprint("books", __name__)
 
@@ -9,6 +10,8 @@ bp = Blueprint("books", __name__)
 def get_books():
     """Get books filtered by user age"""
     try:
+        ensure_seeded()
+
         age = request.args.get("age", type=int)
         
         if age is None:
