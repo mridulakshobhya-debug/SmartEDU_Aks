@@ -15,6 +15,7 @@ from routes.chatbot_routes import bp as chatbot_bp
 from routes.auth import bp as auth_bp
 from routes.ai_tools_routes import bp as ai_tools_bp
 from routes.admin_routes import bp as admin_bp
+from routes.health_routes import bp as health_bp
 
 
 def create_app(config_name=None):
@@ -70,6 +71,7 @@ def create_app(config_name=None):
     app.register_blueprint(ai_tools_bp, url_prefix="/api")
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(admin_bp, url_prefix="/api")
+    app.register_blueprint(health_bp, url_prefix="/api")
     
     # Routes
     @app.route("/")
