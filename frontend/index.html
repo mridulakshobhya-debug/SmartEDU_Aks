@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartEDU LMS - Learn & Grow</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-wrapper">
+        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU LMS</h1>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="elearning.html">eLearning</a>
+          <a href="ai-tools.html">AI Tools</a>
+          <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html">Admin</a>
+          <a href="login.html" style="color: var(--primary); font-weight: 600;">Login</a>
+          <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Sign Up</a>
+        </nav>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+    <!-- Hero Section with Image Slideshow -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <video class="hero-video" autoplay muted loop playsinline aria-hidden="true" poster="images/creative-group-working-startup-using-laptops.jpg">
+        <source src="Video.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-glow" aria-hidden="true"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-cta">
+        <a href="elearning.html" class="btn btn-primary btn-large">Start Learning</a>
+        <a href="elearning.html" class="btn btn-outline btn-large">Browse Lessons</a>
+      </div>
+    </div>
+  </section>
+
+  <main>
+
+    <!-- Features Grid -->
+    <div class="container" style="padding: 4rem 1rem;">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <h2>Why Choose SmartEDU LMS?</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">Discover features designed for safe and effective learning</p>
+      </div>
+      
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 style="margin-top: 0;">🎓 Interactive Lessons</h3>
+          <p>Engaging content tailored to your age and learning pace with interactive exercises and real-world examples.</p>
+          <a href="elearning.html" style="color: var(--primary); font-weight: 600;">Explore lessons →</a>
+        </div>
+        <div class="card">
+          <h3 style="margin-top: 0;">📖 Digital Library</h3>
+          <p>Access curated educational resources selected for age-appropriateness and learning value across all interests.</p>
+          <a href="elearning.html" style="color: var(--primary); font-weight: 600;">Explore resources →</a>
+        </div>
+        <div class="card">
+          <h3 style="margin-top: 0;">🤖 AI Chatbot</h3>
+          <p>Get personalized recommendations and instant answers to your learning questions with intelligent AI.</p>
+          <a href="elearning.html" style="color: var(--primary); font-weight: 600;">Chat now →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container" style="padding: 4rem 1rem; text-align: center; margin-bottom: 2rem;">
+      <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 3rem; max-width: 960px; margin: 0 auto;">
+        <h2 style="color: white; margin-bottom: 1rem;">Ready to Start Learning?</h2>
+        <p style="color: rgba(255,255,255,0.9); margin-bottom: 2rem; font-size: 1.1rem;">Start learning with SmartEDU LMS and build skills that matter.</p>
+        <a href="elearning.html" class="btn btn-outline btn-large">Get Started Now</a>
+      </div>
+    </div>
+
+    <!-- ==================== PREMIUM FEATURES SECTION ==================== -->
+    <section class="premium-section" style="padding: 5rem 1rem; background: linear-gradient(135deg, var(--primary-light), rgba(96, 165, 250, 0.05)); position: relative; overflow: hidden;">
+      <div class="premium-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.5;">
+        <div style="position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(37, 99, 235, 0.2), transparent); border-radius: 50%; top: -100px; left: -100px; animation: floatUp 20s ease-in infinite;"></div>
+        <div style="position: absolute; width: 200px; height: 200px; background: radial-gradient(circle, rgba(96, 165, 250, 0.2), transparent); border-radius: 50%; bottom: -50px; right: -50px; animation: floatUp 15s ease-in infinite 2s;"></div>
+      </div>
+
+      <div class="container" style="position: relative; z-index: 1;">
+        <div style="text-align: center; margin-bottom: 4rem;">
+          <h2 style="font-size: 2.5rem; margin-bottom: 1rem; animation: slideInUp 0.8s ease;">🌟 Premium Features</h2>
+          <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; animation: slideInUp 0.8s ease 0.2s both;">Unlock powerful learning tools designed for success</p>
+        </div>
+
+        <div class="grid grid-3" style="gap: 2rem; margin-bottom: 3rem;">
+          <!-- Feature 1 -->
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.3s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+            <h3 style="margin-bottom: 0.5rem;">Personalized Learning Paths</h3>
+            <p style="color: var(--text-muted); margin-bottom: 0;">AI-powered recommendations tailored to your learning style, pace, and goals for maximum efficiency.</p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(96, 165, 250, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.4s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(96, 165, 250, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+            <h3 style="margin-bottom: 0.5rem;">Progress Analytics</h3>
+            <p style="color: var(--text-muted); margin-bottom: 0;">Detailed insights into your learning journey with visual progress tracking and achievement milestones.</p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.12); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.5s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.18)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+            <h3 style="margin-bottom: 0.5rem;">Certificates & Badges</h3>
+            <p style="color: var(--text-muted); margin-bottom: 0;">Earn verified certificates and digital badges upon course completion to showcase your achievements.</p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.12); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.6s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.18)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+            <h3 style="margin-bottom: 0.5rem;">Community Learning</h3>
+            <p style="color: var(--text-muted); margin-bottom: 0;">Join study groups, collaborate with peers, and learn from experienced mentors in our vibrant community.</p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(14, 165, 233, 0.1); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.7s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(14, 165, 233, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📲</div>
+            <h3 style="margin-bottom: 0.5rem;">Offline Access</h3>
+            <p style="color: var(--text-muted); margin-bottom: 0;">Download lessons and continue learning anytime, anywhere, even without internet connection.</p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="premium-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(37, 99, 235, 0.12); transition: all 0.3s ease; cursor: pointer; animation: slideInUp 0.8s ease 0.8s both;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(37, 99, 235, 0.18)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.08)'">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🎨</div>
+            <h3 style="margin-bottom: 0.5rem;">Interactive Projects</h3>
+            <p style="color: var(--text-muted); margin-bottom: 0;">Build real-world projects, get instant feedback, and develop practical skills with hands-on exercises.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Gallery Section -->
+    <section class="slideshow-section">
+      <div class="container">
+        <h2 class="slideshow-title">See the learning community in action</h2>
+        <p class="slideshow-subtitle">A peek into the collaborative, high-impact learning community inside SmartEDU LMS.</p>
+      </div>
+
+      <div class="slideshow-shell">
+        <div id="galleryTrack" class="slideshow-track" aria-label="Learner gallery">
+          <article class="slideshow-card">
+            <img src="images/businessman-using-laptop-while-sitting-with-young-coworkers-conference-table-coworking-office.jpg" alt="Learners collaborating on laptops">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/creative-group-working-startup-using-laptops.jpg" alt="Creative team working together">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/modern-equipped-computer-lab (1).jpg" alt="Modern computer lab session">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/multiethnic-designers-sitting-together-working-laptops-coworking-space.jpg" alt="Designers collaborating in a workspace">
+          </article>
+          <article class="slideshow-card">
+            <img src="images/people-analyzing-checking-finance-graphs-office.jpg" alt="Students analyzing data together">
+          </article>
+        </div>
+        <div class="slideshow-progress" aria-hidden="true">
+          <div id="galleryProgress" class="slideshow-progress-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Comparison Section -->
+    <section class="comparison-section">
+      <div class="container">
+        <div class="comparison-header">
+          <h2>Feature comparison</h2>
+          <p>Qualitative comparison (metrics-based reporting will be added once real usage data is available).</p>
+        </div>
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h3>SmartEDU LMS</h3>
+            <ul class="comparison-list">
+              <li>Guided learning paths with structured milestones</li>
+              <li>AI tools for worksheets, content analysis, and feedback</li>
+              <li>Project-based learning with submissions and reviews</li>
+              <li>Admin studio for content and quality checks</li>
+              <li>Clean, modern UI built for focus and clarity</li>
+            </ul>
+          </div>
+          <div class="comparison-card muted">
+            <h3>Typical LMS</h3>
+            <ul class="comparison-list">
+              <li>Basic course listings without guidance</li>
+              <li>Limited personalization or automation</li>
+              <li>Minimal project workflow support</li>
+              <li>Fragmented admin tooling</li>
+              <li>Outdated or cluttered interfaces</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="faq-header">
+          <h2>Frequently asked questions</h2>
+          <p>Quick answers to the most common questions about SmartEDU LMS.</p>
+        </div>
+        <div class="faq-grid">
+          <details class="faq-item">
+            <summary>What is SmartEDU LMS?</summary>
+            <p>SmartEDU LMS is a learning management system that combines structured lessons, guided projects, and AI-assisted tools.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How do I track my progress?</summary>
+            <p>Your progress, badges, and certificates are stored locally after you log in, so you can pick up where you left off.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Do I need an account to use the AI tools?</summary>
+            <p>You can explore the AI tools right away, but logging in helps you save progress and keep your work organized.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is SmartEDU LMS suitable for teams?</summary>
+            <p>The admin studio is designed to support structured content management, making it useful for individuals and small teams.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy / Terms -->
+    <section class="legal-section">
+      <div class="container">
+        <div class="legal-card">
+          <div>
+            <h3>Privacy & Terms</h3>
+            <p>We keep policies clear and accessible. Review the latest documents here.</p>
+          </div>
+          <div class="legal-links">
+            <a href="privacy.html" class="btn btn-secondary">Privacy Policy</a>
+            <a href="terms.html" class="btn btn-secondary">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="authPrompt" class="auth-prompt" aria-hidden="true">
+    <div class="auth-prompt-card" role="dialog" aria-modal="true" aria-labelledby="authPromptTitle">
+      <button class="auth-prompt-close" type="button" aria-label="Close" data-auth-close>×</button>
+      <h3 id="authPromptTitle">Welcome to SmartEDU LMS</h3>
+      <p>Log in or create an account to save progress, access AI tools, and track certificates.</p>
+      <div class="auth-prompt-actions">
+        <a href="login.html" class="btn btn-primary">Log In</a>
+        <a href="signup.html" class="btn btn-outline">Sign Up</a>
+      </div>
+      <button class="auth-prompt-skip" type="button" data-auth-close>Continue as guest</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="flex-between" style="margin-bottom: 2rem; flex-wrap: wrap; gap: 2rem;">
+        <div>
+          <h4>SmartEDU LMS</h4>
+          <p style="margin-bottom: 0;">Making education safe and accessible for everyone.</p>
+        </div>
+        <div class="flex" style="gap: 2rem;">
+          <div>
+            <h5 style="margin-bottom: 1rem;">Product</h5>
+            <a href="#" style="display: block; margin-bottom: 0.5rem;">Features</a>
+            <a href="#" style="display: block;">About</a>
+          </div>
+          <div>
+            <h5 style="margin-bottom: 1rem;">Support</h5>
+            <a href="#" style="display: block; margin-bottom: 0.5rem;">Help Center</a>
+            <a href="#" style="display: block; margin-bottom: 0.5rem;">Contact</a>
+            <a href="#" style="display: block;">Privacy</a>
+          </div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid var(--border); padding-top: 2rem; text-align: center;">
+        <p style="margin-bottom: 0; color: var(--text-muted);">© 2026 SmartEDU LMS (Learning Management Systems).</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+
+

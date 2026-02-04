@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - SmartEDU LMS</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .auth-container {
+      max-width: 450px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .auth-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-header h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      box-sizing: border-box;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    [data-theme="dark"] .form-group input {
+      background: var(--dark-bg-secondary);
+      color: var(--dark-text-primary);
+      border-color: var(--dark-border);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(31, 118, 232, 0.1);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 12px rgba(31, 118, 232, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .auth-footer p {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .auth-footer a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      display: none;
+      border-left: 4px solid #dc2626;
+    }
+
+    [data-theme="dark"] .error-message {
+      background: rgba(220, 38, 38, 0.1);
+      color: #fecaca;
+    }
+
+    .success-message {
+      background: rgba(37, 99, 235, 0.12);
+      color: #1e40af;
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      display: none;
+      border-left: 4px solid var(--primary);
+    }
+
+    [data-theme="dark"] .success-message {
+      background: rgba(37, 99, 235, 0.2);
+      color: #bfdbfe;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-row .form-group {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-wrapper">
+        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU LMS</h1>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="elearning.html">eLearning</a>
+          <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html">Admin</a>
+        </nav>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2>Join SmartEDU LMS</h2>
+          <p>Create your account and start learning</p>
+        </div>
+
+        <div class="auth-oauth">
+          <button type="button" class="oauth-btn"><span class="oauth-icon">G</span>Continue with Google</button>
+          <button type="button" class="oauth-btn"><span class="oauth-icon">GH</span>Continue with GitHub</button>
+          <button type="button" class="oauth-btn"><span class="oauth-icon"></span>Continue with Apple</button>
+        </div>
+        <div class="auth-divider"><span>or</span></div>
+
+        <div class="error-message" id="errorMsg"></div>
+        <div class="success-message" id="successMsg"></div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              name="full_name"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Choose a username"
+              minlength="3"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Min 6 characters"
+                minlength="6"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container text-center">
+      <p style="color: var(--text-muted);">© 2026 SmartEDU LMS (Learning Management Systems)</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function handleSignup(event) {
+      event.preventDefault();
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const errorMsg = document.getElementById('errorMsg');
+      const successMsg = document.getElementById('successMsg');
+
+      // Hide messages
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+
+      if (!fullName || !username || !email || !password) {
+        errorMsg.textContent = 'Please fill in all required fields';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (username.length < 3) {
+        errorMsg.textContent = 'Username must be at least 3 characters';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (password.length < 6) {
+        errorMsg.textContent = 'Password must be at least 6 characters';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      // Send signup request
+      fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          full_name: fullName,
+          username: username,
+          email: email,
+          password: password
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            successMsg.textContent = 'Account created successfully! Redirecting to login...';
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+              window.location.href = 'login.html';
+            }, 1500);
+          } else {
+            errorMsg.textContent = data.error || 'Signup failed. Please try again.';
+            errorMsg.style.display = 'block';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          errorMsg.textContent = 'Connection error. Please try again.';
+          errorMsg.style.display = 'block';
+        });
+    }
+  </script>
+</body>
+</html>

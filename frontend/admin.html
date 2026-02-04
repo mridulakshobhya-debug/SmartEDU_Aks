@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Studio - SmartEDU LMS</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="admin-body">
+  <header>
+    <div class="container">
+      <div class="header-wrapper">
+        <h1 style="margin-bottom: 0;" class="logo">SmartEDU LMS</h1>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="elearning.html">eLearning</a>
+          <a href="ai-tools.html">AI Tools</a>
+          <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html" style="color: var(--primary); font-weight: 600;">Admin</a>
+        </nav>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+          <span id="themeIcon">Theme</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="adminAccessGate" class="auth-prompt admin-gate" aria-hidden="true">
+    <div class="auth-prompt-card" role="dialog" aria-modal="true" aria-labelledby="adminGateTitle">
+      <h3 id="adminGateTitle">Admin Access Required</h3>
+      <p>Log in or create an account to access the SmartEDU LMS Admin Studio.</p>
+      <div class="auth-prompt-actions">
+        <a href="login.html" class="btn btn-primary">Log In</a>
+        <a href="signup.html" class="btn btn-outline">Sign Up</a>
+      </div>
+      <a href="index.html" class="btn btn-secondary">Back to Home</a>
+    </div>
+  </div>
+
+  <main class="admin-shell">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="admin-pill">Admin Studio</div>
+        <p>Design, review, and measure learning experiences.</p>
+      </div>
+      <nav class="admin-nav">
+        <a href="#dashboard" class="active">Dashboard</a>
+        <a href="#content-studio">Content Studio</a>
+        <a href="#moderation">Moderation</a>
+        <a href="#analytics">Analytics</a>
+      </nav>
+      <div class="admin-sidecard">
+        <h4>Quick Actions</h4>
+        <button class="btn btn-primary" onclick="scrollToSection('content-studio')">Create Lesson</button>
+        <button class="btn btn-secondary" onclick="scrollToSection('moderation')">Review Queue</button>
+      </div>
+    </aside>
+
+    <section class="admin-main">
+      <section id="dashboard" class="admin-section">
+        <div class="admin-hero">
+          <div>
+            <h2>Command Center</h2>
+            <p>Track platform health, content velocity, and teaching impact from one place.</p>
+          </div>
+          <div class="admin-hero-actions">
+            <button class="btn btn-primary" onclick="refreshAdminData()">Refresh Data</button>
+            <button class="btn btn-secondary" onclick="scrollToSection('analytics')">View Analytics</button>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-title">Total Lessons</div>
+            <div id="statLessons" class="stat-value">0</div>
+            <div class="stat-meta">Published across all subjects</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Library Titles</div>
+            <div id="statBooks" class="stat-value">0</div>
+            <div class="stat-meta">Curated book recommendations</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Active Learners</div>
+            <div id="statUsers" class="stat-value">0</div>
+            <div class="stat-meta">Registered user accounts</div>
+          </div>
+          <div class="stat-card highlight">
+            <div class="stat-title">Average Lesson Time</div>
+            <div id="statDuration" class="stat-value">0 min</div>
+            <div class="stat-meta">Based on all lessons</div>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Latest Lessons</h3>
+              <span class="status-chip in-progress">Auto updated</span>
+            </div>
+            <div id="latestLessons" class="list-stack"></div>
+          </div>
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Difficulty Mix</h3>
+              <span class="status-chip locked">Snapshot</span>
+            </div>
+            <div id="difficultyChart" class="chart-stack"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="content-studio" class="admin-section">
+        <div class="section-title">
+          <h2>Content Studio</h2>
+          <p>Create and update lessons with structured steps, quizzes, and metadata.</p>
+        </div>
+
+        <div class="admin-grid">
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Create Lesson</h3>
+              <span class="status-chip in-progress">Draft supported</span>
+            </div>
+            <form id="lessonForm" class="form-stack">
+              <label>Lesson Title</label>
+              <input id="lessonTitle" type="text" placeholder="Example: Introduction to CSS Layouts" />
+              <label>Description</label>
+              <textarea id="lessonDescription" placeholder="Short summary of the lesson goal."></textarea>
+              <label>Subject</label>
+              <input id="lessonSubject" type="text" placeholder="Example: Web Development" />
+              <div class="form-row">
+                <div>
+                  <label>Difficulty</label>
+                  <select id="lessonDifficulty">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Duration (minutes)</label>
+                  <input id="lessonDuration" type="number" min="10" max="180" value="45" />
+                </div>
+              </div>
+              <label>Video URL (optional)</label>
+              <input id="lessonVideo" type="text" placeholder="https://..." />
+              <label>Key Information</label>
+              <textarea id="lessonInformation" placeholder="Key takeaways or learning objectives."></textarea>
+              <label>Steps (one per line)</label>
+              <textarea id="lessonSteps" placeholder="Step 1\nStep 2\nStep 3"></textarea>
+              <label>Quiz (question | option1;option2;option3 | correctIndex)</label>
+              <textarea id="lessonQuiz" placeholder="What is CSS? | Styling language;Database;API | 0"></textarea>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="saveLessonDraft()">Save Draft</button>
+                <button type="submit" class="btn btn-primary">Publish Lesson</button>
+              </div>
+              <div id="lessonFormStatus" class="form-status">Ready to publish a new lesson.</div>
+            </form>
+          </div>
+
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Quick Update</h3>
+              <span class="status-chip locked">Update metadata</span>
+            </div>
+            <div class="form-stack">
+              <label>Select Lesson</label>
+              <select id="lessonSelect"></select>
+              <label>Difficulty</label>
+              <select id="updateDifficulty">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <label>Duration (minutes)</label>
+              <input id="updateDuration" type="number" min="10" max="180" />
+              <label>Subject</label>
+              <input id="updateSubject" type="text" />
+              <button class="btn btn-primary" onclick="updateLesson()">Save Changes</button>
+              <div id="updateStatus" class="form-status">Select a lesson to edit.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="moderation" class="admin-section">
+        <div class="section-title">
+          <h2>Moderation and Quality Review</h2>
+          <p>Scan for missing content, and triage issues before publishing.</p>
+        </div>
+
+        <div class="admin-grid">
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Quality Check Queue</h3>
+              <span class="status-chip in-progress">Auto scan</span>
+            </div>
+            <div id="qualityQueue" class="list-stack"></div>
+          </div>
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Manual Flags</h3>
+              <span class="status-chip locked">Local notes</span>
+            </div>
+            <div class="form-stack">
+              <label>Flag Note</label>
+              <textarea id="flagNote" placeholder="Describe the issue to revisit."></textarea>
+              <button class="btn btn-secondary" onclick="addFlag()">Add Flag</button>
+              <div id="flagList" class="list-stack"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="analytics" class="admin-section">
+        <div class="section-title">
+          <h2>Analytics</h2>
+          <p>Understand distribution across subjects and levels.</p>
+        </div>
+
+        <div class="admin-grid">
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Subject Coverage</h3>
+              <span class="status-chip in-progress">Coverage map</span>
+            </div>
+            <div id="subjectChart" class="chart-stack"></div>
+          </div>
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>System Notes</h3>
+              <span class="status-chip locked">Highlights</span>
+            </div>
+            <div class="notes-stack">
+              <div class="note-card">
+                <strong>Tip:</strong> Balance beginner and intermediate lessons to improve retention.
+              </div>
+              <div class="note-card">
+                <strong>Reminder:</strong> Add at least one quiz item per lesson for certification.
+              </div>
+              <div class="note-card">
+                <strong>Next:</strong> Consider adding project checklists for advanced tracks.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

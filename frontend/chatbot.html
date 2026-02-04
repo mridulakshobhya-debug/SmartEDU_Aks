@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chatbot - SmartEDU LMS</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .chatbot-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .chat-container {
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      height: 700px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(31, 92, 240, 0.15);
+      animation: slideInUp 0.6s ease;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: var(--space-lg);
+      font-weight: 700;
+      font-size: 1.25rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chat-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmerFlow 3s infinite;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      background: linear-gradient(180deg, var(--bg-secondary), rgba(59, 130, 246, 0.02));
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: var(--space-md);
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message-content {
+      max-width: 70%;
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-lg);
+      word-wrap: break-word;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .message.user .message-content {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border-bottom-right-radius: var(--radius-sm);
+      animation: slideInRight 0.4s ease;
+    }
+
+    .message.bot .message-content {
+      background: white;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: var(--radius-sm);
+      animation: slideInLeft 0.4s ease;
+    }
+
+    .message.bot .message-content:hover {
+      box-shadow: 0 8px 20px rgba(31, 92, 240, 0.15);
+      transform: translateX(5px);
+    }
+
+    [data-theme="dark"] .message.bot .message-content {
+      background: var(--dark-bg-tertiary);
+      color: var(--dark-text-primary);
+      border-color: var(--dark-border);
+    }
+
+    .chat-input-area {
+      padding: var(--space-lg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: var(--space-md);
+      background: var(--bg-primary);
+      position: relative;
+    }
+
+    .chat-input-area::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      animation: gradientFlow 3s ease infinite;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: var(--space-md);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] .chat-input-area input {
+      background: var(--dark-bg-secondary);
+      color: var(--dark-text-primary);
+      border-color: var(--dark-border);
+    }
+
+    .chat-input-area input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(31, 92, 240, 0.2), 0 8px 16px rgba(31, 92, 240, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .chat-input-area button {
+      padding: var(--space-md) var(--space-lg);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all var(--transition-base);
+    }
+
+    .chat-input-area button:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 12px rgba(31, 118, 232, 0.3);
+    }
+
+    .chat-input-area button:active {
+      transform: scale(0.98);
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .empty-state p {
+      margin: var(--space-lg) 0;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      animation: pulse 1.5s infinite;
+    }
+
+    .loading::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      animation: pulse 1.5s infinite 0.3s;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .chat-container {
+        height: 500px;
+      }
+
+      .message-content {
+        max-width: 100%;
+      }
+    }
+
+    .title-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .title-section h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .title-section p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-wrapper">
+        <h1 style="margin-bottom: 0;" class="logo">📚 SmartEDU LMS</h1>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="elearning.html">eLearning</a>
+          <a href="ai-tools.html">AI Tools</a>
+          <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html">Admin</a>
+          <a href="login.html" style="color: var(--primary); font-weight: 600;">Login</a>
+          <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Sign Up</a>
+        </nav>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="chatbot-wrapper">
+      <div class="title-section">
+        <h2>🤖 AI Chatbot</h2>
+        <p>Ask anything and get clear, helpful answers</p>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-header">SmartEDU LMS AI Assistant</div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="empty-state">
+            <p style="font-size: 2.5rem; margin: 0;">💬</p>
+            <p style="margin: var(--space-lg) 0;">Start a conversation!</p>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Ask a question about anything and I'll help.</p>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Ask me anything..."
+            onkeypress="handleKeyPress(event)"
+          />
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container text-center">
+      <p style="color: var(--text-muted);">© 2026 SmartEDU LMS (Learning Management Systems)</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    let isFirstMessage = true;
+    let conversationHistory = [];
+
+    function addMessage(text, sender) {
+      const chatMessages = document.getElementById('chatMessages');
+      
+      // Remove empty state on first message
+      if (isFirstMessage) {
+        chatMessages.innerHTML = '';
+        isFirstMessage = false;
+      }
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.innerHTML = text;
+
+      messageDiv.appendChild(contentDiv);
+      chatMessages.appendChild(messageDiv);
+
+      // Auto scroll to bottom
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const message = input.value.trim();
+
+      if (!message) return;
+
+      // Add user message
+      addMessage(message, 'user');
+      conversationHistory.push({ role: 'user', content: message });
+
+      // Clear input
+      input.value = '';
+      input.focus();
+
+      // Show loading state
+      const loadingMsg = document.createElement('div');
+      loadingMsg.className = 'message bot';
+      const loadingContent = document.createElement('div');
+      loadingContent.className = 'message-content loading';
+      loadingContent.innerHTML = 'Thinking';
+      loadingMsg.appendChild(loadingContent);
+      document.getElementById('chatMessages').appendChild(loadingMsg);
+      document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+
+      // Send to API with conversation history
+      fetch('/api/chatbot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_message: message,
+          conversation_history: conversationHistory
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Remove loading message
+          document.getElementById('chatMessages').removeChild(loadingMsg);
+
+          if (data.success && data.reply) {
+            addMessage(data.reply, 'bot');
+            conversationHistory.push({ role: 'assistant', content: data.reply });
+          } else {
+            const errorMsg = 'Sorry, I could not fetch recommendations right now. Please try again.';
+            addMessage(errorMsg, 'bot');
+            conversationHistory.push({ role: 'assistant', content: errorMsg });
+          }
+        })
+        .catch(error => {
+          // Remove loading message if it exists
+          if (document.getElementById('chatMessages').contains(loadingMsg)) {
+            document.getElementById('chatMessages').removeChild(loadingMsg);
+          }
+          console.error('Error:', error);
+          const errorMsg = 'Sorry, there was an error connecting to the server. Please check your connection and try again.';
+          addMessage(errorMsg, 'bot');
+          conversationHistory.push({ role: 'assistant', content: errorMsg });
+        });
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
+    // Auto focus on load
+    window.addEventListener('load', () => {
+      document.getElementById('messageInput').focus();
+    });
+  </script>
+  <script src="js/theme.js"></script>
+</body>
+</html>
