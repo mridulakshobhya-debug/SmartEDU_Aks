@@ -99,6 +99,23 @@ def create_app(config_name=None):
     # Create database tables
     with app.app_context():
         db.create_all()
+        # Auto-seed on start when database is empty
+        auto_seed = os.getenv("AUTO_SEED", "true").strip().lower() in {"1", "true", "yes", "on"}
+        if auto_seed and not app.config.get("TESTING", False):
+            try:
+                from models.lesson import Lesson
+                from models.book import Book
+                from models.user import User
+                from seed import seed_all
+
+                has_lessons = Lesson.query.first() is not None
+                has_books = Book.query.first() is not None
+                has_users = User.query.first() is not None
+
+                if not (has_lessons or has_books or has_users):
+                    seed_all(reset_db=False, clear_users=False)
+            except Exception as e:
+                app.logger.error(f"Auto-seed failed: {e}")
     
     return app
 
