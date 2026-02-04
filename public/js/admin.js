@@ -135,6 +135,48 @@ async function loadQualityQueue() {
   }
 }
 
+function setSeedStatus(message, tone) {
+  const status = document.getElementById('seedStatus');
+  if (!status) return;
+  status.textContent = message;
+  status.classList.remove('success', 'error');
+  if (tone === 'success') status.classList.add('success');
+  if (tone === 'error') status.classList.add('error');
+}
+
+async function seedDatabase() {
+  const tokenInput = document.getElementById('seedTokenInput');
+  const resetToggle = document.getElementById('seedReset');
+  const token = tokenInput ? tokenInput.value.trim() : '';
+
+  if (!token) {
+    setSeedStatus('Seed token is required.', 'error');
+    return;
+  }
+
+  const reset = resetToggle ? resetToggle.checked : true;
+  setSeedStatus('Seeding database...', 'success');
+
+  try {
+    const response = await fetch('/api/admin/seed', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Seed-Token': token
+      },
+      body: JSON.stringify({ reset })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Seed failed');
+
+    sessionStorage.setItem('smartedu_seed_token', token);
+    setSeedStatus('Database seeded successfully.', 'success');
+    await refreshAdminData();
+  } catch (error) {
+    setSeedStatus(`Seed failed: ${error.message}`, 'error');
+  }
+}
+
 function updateStats(data) {
   const counts = data.counts || {};
   const statLessons = document.getElementById('statLessons');
@@ -421,6 +463,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const form = document.getElementById('lessonForm');
   if (form) form.addEventListener('submit', handleLessonSubmit);
+
+  const seedInput = document.getElementById('seedTokenInput');
+  if (seedInput) {
+    const saved = sessionStorage.getItem('smartedu_seed_token');
+    if (saved) seedInput.value = saved;
+  }
 
   loadLessonDraft();
   renderFlagList(loadFlags());

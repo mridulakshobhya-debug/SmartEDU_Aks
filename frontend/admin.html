@@ -107,6 +107,24 @@
             </div>
             <div id="difficultyChart" class="chart-stack"></div>
           </div>
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h3>Database Tools</h3>
+              <span class="status-chip locked">Protected</span>
+            </div>
+            <div class="form-stack">
+              <label>Seed Token</label>
+              <input id="seedTokenInput" type="password" placeholder="Enter SEED_TOKEN" />
+              <label style="display: flex; gap: 0.5rem; align-items: center;">
+                <input id="seedReset" type="checkbox" checked />
+                Reset existing data
+              </label>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="button" onclick="seedDatabase()">Seed Database</button>
+              </div>
+              <div id="seedStatus" class="form-status">Use cautiously in production.</div>
+            </div>
+          </div>
         </div>
       </section>
 
