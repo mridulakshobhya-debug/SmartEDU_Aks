@@ -4,7 +4,7 @@ from flask import current_app
 from models.book import Book
 from models.lesson import Lesson
 from models.user import User
-from seed import seed_all
+from seed import seed_core
 
 _seed_attempted = False
 
@@ -31,5 +31,10 @@ def ensure_seeded():
         return False
 
     _seed_attempted = True
-    seed_all(reset_db=False, clear_users=False)
-    return True
+    try:
+        seed_core(reset_db=False, clear_users=False)
+        return True
+    except Exception as exc:
+        if current_app:
+            current_app.logger.error(f"Auto-seed failed: {exc}")
+        return False

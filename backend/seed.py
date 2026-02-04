@@ -1664,8 +1664,36 @@ def seed_users(clear_existing=True):
     db.session.commit()
 
 
+def seed_core(reset_db=True, clear_users=True):
+    """Seed a lightweight core dataset. Expects an active app context."""
+    if reset_db:
+        print("Clearing existing data...")
+        db.drop_all()
+
+    db.create_all()
+
+    print("\nAdding books...")
+    seed_books()
+
+    print("\nAdding core lessons...")
+    seed_lessons()
+
+    print("\nAdding users...")
+    seed_users(clear_existing=clear_users)
+
+    total_lessons = Lesson.query.count()
+    print(f"\n[+] Core database seeded successfully!")
+    print(f"[+] Total lessons in database: {total_lessons}\n")
+
+    return {
+        "lessons": total_lessons,
+        "books": Book.query.count(),
+        "users": User.query.count(),
+    }
+
+
 def seed_all(reset_db=True, clear_users=True):
-    """Seed books, lessons, and users. Expects an active app context."""
+    """Seed full dataset (heavy). Expects an active app context."""
     if reset_db:
         print("Clearing existing data...")
         db.drop_all()
