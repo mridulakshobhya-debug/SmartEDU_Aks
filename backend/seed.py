@@ -9,23 +9,12 @@ import os
 # Add backend to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from app import create_app
 from extensions import db
 from models.book import Book
 from models.lesson import Lesson
 from models.user import User
 
-# Import all seed functions
-from seed_python_basics import seed_python_basics_course
-from seed_advanced_python import seed_advanced_python_course
-from seed_javascript import seed_javascript
-from seed_javascript_advanced import seed_advanced_javascript
-from seed_web_development import seed_web_development
-from seed_web_development_advanced import seed_advanced_web_development
-from seed_computer_science import seed_computer_science
-from seed_computer_science_advanced import seed_advanced_computer_science
-from seed_artificial_intelligence import seed_artificial_intelligence
-from seed_artificial_intelligence_advanced import seed_advanced_artificial_intelligence
+# NOTE: heavy seed modules are imported inside seed_all() to avoid circular imports
 
 
 def seed_books():
@@ -1694,6 +1683,18 @@ def seed_core(reset_db=True, clear_users=True):
 
 def seed_all(reset_db=True, clear_users=True):
     """Seed full dataset (heavy). Expects an active app context."""
+    # Import heavy seed modules lazily to avoid circular imports when auto-seeding
+    from seed_python_basics import seed_python_basics_course
+    from seed_advanced_python import seed_advanced_python_course
+    from seed_javascript import seed_javascript
+    from seed_javascript_advanced import seed_advanced_javascript
+    from seed_web_development import seed_web_development
+    from seed_web_development_advanced import seed_advanced_web_development
+    from seed_computer_science import seed_computer_science
+    from seed_computer_science_advanced import seed_advanced_computer_science
+    from seed_artificial_intelligence import seed_artificial_intelligence
+    from seed_artificial_intelligence_advanced import seed_advanced_artificial_intelligence
+
     if reset_db:
         print("Clearing existing data...")
         db.drop_all()
@@ -1750,6 +1751,7 @@ def seed_all(reset_db=True, clear_users=True):
 
 def main():
     """Initialize the database with sample data"""
+    from app import create_app
     app = create_app()
 
     with app.app_context():
