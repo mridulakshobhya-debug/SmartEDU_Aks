@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from extensions import db
 from models.user import User
+from sqlalchemy import func
 import logging
 
 bp = Blueprint("auth", __name__)
@@ -81,8 +82,11 @@ def login():
             return jsonify({"error": "Username/email and password are required"}), 400
         
         # Find user by username or email
+        identifier = username_or_email.strip()
+        identifier_lower = identifier.lower()
         user = User.query.filter(
-            (User.username == username_or_email) | (User.email == username_or_email)
+            (func.lower(User.username) == identifier_lower)
+            | (func.lower(User.email) == identifier_lower)
         ).first()
         
         if not user or not user.check_password(password):

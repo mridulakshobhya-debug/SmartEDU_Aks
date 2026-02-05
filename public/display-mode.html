@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Display Mode - SmartEDU LMS</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-wrapper">
+        <h1 style="margin-bottom: 0;" class="logo">SmartEDU LMS</h1>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="elearning.html">eLearning</a>
+          <a href="ai-tools.html">AI Tools</a>
+          <a href="chatbot.html">AI Chatbot</a>
+          <a href="admin.html">Admin</a>
+          <a href="login.html" style="color: var(--primary); font-weight: 600;">Login</a>
+          <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Sign Up</a>
+        </nav>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+          <span id="themeIcon">Theme</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main data-display-page>
+    <section class="container display-mode-section">
+      <div class="section-header">
+        <h2>Choose Your Display Mode</h2>
+        <p>Pick the layout that matches your device to preview how SmartEDU should look.</p>
+        <div class="status-chip in-progress" data-display-status>Current selection: Monitor</div>
+      </div>
+
+      <div class="grid grid-3 mode-grid">
+        <div class="card mode-card" data-display-select="mobile">
+          <div class="mode-label">Phone Layout</div>
+          <h3>Mobile</h3>
+          <p>Compact spacing, stacked navigation, and touch-friendly buttons.</p>
+          <div class="mode-actions">
+            <button class="btn btn-primary" data-display-button>Select Mobile</button>
+          </div>
+        </div>
+
+        <div class="card mode-card" data-display-select="tablet">
+          <div class="mode-label">Tablet Layout</div>
+          <h3>Tablet</h3>
+          <p>Balanced typography, roomy cards, and flexible grid layouts.</p>
+          <div class="mode-actions">
+            <button class="btn btn-primary" data-display-button>Select Tablet</button>
+          </div>
+        </div>
+
+        <div class="card mode-card" data-display-select="monitor">
+          <div class="mode-label">Desktop Layout</div>
+          <h3>Monitor</h3>
+          <p>Full navigation, wide grids, and spacious content for larger screens.</p>
+          <div class="mode-actions">
+            <button class="btn btn-primary" data-display-button>Select Monitor</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container text-center">
+      <p style="color: var(--text-muted);">(c) 2026 SmartEDU LMS (Learning Management Systems)</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

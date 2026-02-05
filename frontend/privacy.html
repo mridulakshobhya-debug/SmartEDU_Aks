@@ -29,18 +29,35 @@
 
   <main>
     <div class="container" style="padding: 3.5rem 1rem;">
-      <div class="card">
+      <div class="card policy-card">
         <h2 style="margin-top: 0;">Privacy Policy</h2>
-        <p style="color: var(--text-secondary);">
+        <p class="policy-intro">
           This is a placeholder privacy policy page for SmartEDU LMS. Replace this text
           with your official policy once finalized.
         </p>
-        <h4>What we collect</h4>
-        <p style="color: var(--text-secondary);">Account details, usage data, and content you submit.</p>
-        <h4>How we use data</h4>
-        <p style="color: var(--text-secondary);">To deliver learning content, improve features, and support users.</p>
-        <h4>Your choices</h4>
-        <p style="color: var(--text-secondary);">You can request data access or deletion at any time.</p>
+
+        <div class="policy-accordion">
+          <details class="policy-item">
+            <summary>What we collect</summary>
+            <div class="policy-body">
+              <p>Account details, usage data, and content you submit.</p>
+            </div>
+          </details>
+
+          <details class="policy-item">
+            <summary>How we use data</summary>
+            <div class="policy-body">
+              <p>To deliver learning content, improve features, and support users.</p>
+            </div>
+          </details>
+
+          <details class="policy-item">
+            <summary>Your choices</summary>
+            <div class="policy-body">
+              <p>You can request data access or deletion at any time.</p>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
   </main>

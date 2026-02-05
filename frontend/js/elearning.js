@@ -47,6 +47,146 @@ const difficultyOrder = {
   advanced: 3
 };
 
+const safeText = (value) => {
+  if (value === null || value === undefined) return '';
+  return String(value);
+};
+
+const stripMarkdown = (text) => {
+  return safeText(text)
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+    .replace(/[#>*_~]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const normalizeList = (value) => {
+  if (Array.isArray(value)) {
+    return value.map(item => safeText(item)).filter(Boolean);
+  }
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) return [];
+
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (Array.isArray(parsed)) {
+        return parsed.map(item => safeText(item)).filter(Boolean);
+      }
+    } catch (err) {
+      // fall back to manual parsing
+    }
+
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      const inner = trimmed.slice(1, -1);
+      return inner
+        .split(',')
+        .map(item => item.replace(/^['"\s]+|['"\s]+$/g, ''))
+        .filter(Boolean);
+    }
+
+    return trimmed
+      .split(/[\r\n]+|\u2022|\u00b7|-\s+/)
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const normalizeSteps = (stepsValue) => {
+  if (Array.isArray(stepsValue)) {
+    return stepsValue.map(step => {
+      if (typeof step === 'string') return step;
+      if (step && typeof step === 'object') {
+        return step.title || step.text || step.step || '';
+      }
+      return safeText(step);
+    }).filter(Boolean);
+  }
+  return normalizeList(stepsValue);
+};
+
+const sanitizeItem = (item) => {
+  return safeText(item)
+    .replace(/^[\s\-*\d.)]+/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const buildFallbackHighlights = (lesson) => {
+  const subject = lesson.subject || 'this topic';
+  const level = safeText(lesson.difficulty).toLowerCase();
+  const levelLabel = level === 'beginner'
+    ? 'foundational'
+    : level === 'advanced'
+      ? 'advanced'
+      : 'core';
+
+  return [
+    `Build ${levelLabel} ${subject} skills with guided practice.`,
+    'Learn concepts through short explanations and examples.',
+    'Reinforce learning with quick checks and recap notes.'
+  ];
+};
+
+const getLessonHighlights = (lesson) => {
+  const infoItems = normalizeList(lesson.information);
+  const stepItems = normalizeSteps(lesson.steps);
+  const merged = [...infoItems, ...stepItems].map(sanitizeItem).filter(Boolean);
+  const unique = Array.from(new Set(merged));
+
+  const fallback = buildFallbackHighlights(lesson);
+  while (unique.length < 3) {
+    unique.push(fallback[unique.length % fallback.length]);
+  }
+  return unique.slice(0, 3);
+};
+
+const buildLessonSummary = (lesson) => {
+  const description = safeText(lesson.description).trim();
+  if (description) return description;
+
+  const infoItems = normalizeList(lesson.information);
+  if (infoItems.length) return infoItems[0];
+
+  const steps = normalizeSteps(lesson.steps);
+  if (steps.length) return steps[0];
+
+  const contentText = stripMarkdown(lesson.content);
+  if (contentText) return contentText.length > 140 ? `${contentText.slice(0, 137)}...` : contentText;
+
+  return 'Build confidence with guided lessons, practice, and quick reviews.';
+};
+
+const getLessonStats = (lesson) => {
+  const stepsCount = normalizeSteps(lesson.steps).length;
+  const quizCount = normalizeList(lesson.quiz).length;
+
+  const durationMinutes = Number(lesson.duration_minutes);
+  const durationLabel = Number.isFinite(durationMinutes) && durationMinutes > 0
+    ? `${durationMinutes} min`
+    : 'Self-paced';
+
+  const minAge = lesson.min_age;
+  const maxAge = lesson.max_age;
+  const ageLabel = minAge && maxAge
+    ? `${minAge}-${maxAge}`
+    : minAge
+      ? `${minAge}+`
+      : 'All ages';
+
+  return {
+    stepsCount,
+    quizCount,
+    durationLabel,
+    ageLabel
+  };
+};
+
 async function loadLessons() {
   try {
     const response = await fetch('/api/lessons');
@@ -375,24 +515,44 @@ function renderCourses(lessons) {
       const quizScore = ProgressStore.getQuizScore(lesson.id, progress);
       const statusClass = completed ? 'complete' : 'locked';
       const statusText = completed ? 'Completed' : 'Not started';
-      const scoreText = quizScore ? `${quizScore.score}% mastery` : 'No quiz score';
+      const stats = getLessonStats(lesson);
+      const summary = buildLessonSummary(lesson);
+      const highlights = getLessonHighlights(lesson);
+      const stepsLabel = stats.stepsCount ? stats.stepsCount : 'Flexible';
+      const quizLabel = stats.quizCount ? stats.quizCount : 'None';
+      const scoreText = quizScore
+        ? `${quizScore.score}% mastery`
+        : stats.quizCount
+          ? 'No quiz score yet'
+          : 'No quiz';
+      const difficultyLabel = safeText(lesson.difficulty).toLowerCase() || 'intermediate';
+      const difficultyDisplay = difficultyLabel.charAt(0).toUpperCase() + difficultyLabel.slice(1);
 
       html += `
-        <div class="card lesson-card" onclick="window.location.href='course.html?id=${lesson.id}'" style="cursor: pointer;">
-          <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: start;">
-            <span class="badge" style="background: ${getDifficultyColor(lesson.difficulty)}; color: white; padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: capitalize;">
-              ${lesson.difficulty}
+        <div class="card lesson-card course-card" onclick="window.location.href='course.html?id=${lesson.id}'" style="cursor: pointer;">
+          <div class="course-header">
+            <span class="badge course-level" style="background: ${getDifficultyColor(difficultyLabel)}; color: white; padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: capitalize;">
+              ${difficultyDisplay}
             </span>
             <span class="status-chip ${statusClass}">${statusText}</span>
           </div>
-          <h4 style="margin: 0.5rem 0 0.75rem 0; color: var(--text-primary); line-height: 1.4; min-height: 3rem;">${lesson.title}</h4>
-          <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0.75rem 0; flex-grow: 1;">${lesson.description}</p>
-          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);">
-            <span>Time: ${lesson.duration_minutes}m</span>
-            <span>${scoreText}</span>
+          <h4 class="course-title">${lesson.title}</h4>
+          <p class="course-summary">${summary}</p>
+          <div class="course-highlights">
+            <span>Duration: ${stats.durationLabel}</span>
+            <span>Ages: ${stats.ageLabel}</span>
+            <span>Steps: ${stepsLabel}</span>
+            <span>Quiz: ${quizLabel}</span>
           </div>
-          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
-            <button class="btn btn-primary" style="width: 100%; cursor: pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">View Course</button>
+          <div class="course-learn">
+            <div class="course-learn-title">What you'll learn</div>
+            <ul class="course-learn-list">
+              ${highlights.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="course-score">${scoreText}</div>
+          <div class="course-actions">
+            <button class="btn btn-primary" style="width: 100%; cursor: pointer;">View Course</button>
           </div>
         </div>
       `;
@@ -404,18 +564,31 @@ function renderCourses(lessons) {
   container.innerHTML = html;
 }
 
+function buildSearchText(lesson) {
+  const info = normalizeList(lesson.information).join(' ');
+  const steps = normalizeSteps(lesson.steps).join(' ');
+  return [
+    safeText(lesson.title),
+    safeText(lesson.description),
+    safeText(lesson.subject),
+    info,
+    steps
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+}
+
 function filterCourses() {
-  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
   const subjectFilter = document.getElementById('subjectFilter').value;
   const difficultyFilter = document.getElementById('difficultyFilter').value.toLowerCase();
 
   let filtered = allLessons.filter(lesson => {
-    const matchesSearch =
-      lesson.title.toLowerCase().includes(searchTerm) ||
-      lesson.description.toLowerCase().includes(searchTerm);
+    const matchesSearch = !searchTerm || buildSearchText(lesson).includes(searchTerm);
 
     const matchesSubject = !subjectFilter || lesson.subject === subjectFilter;
-    const matchesDifficulty = !difficultyFilter || lesson.difficulty.toLowerCase() === difficultyFilter;
+    const matchesDifficulty = !difficultyFilter || safeText(lesson.difficulty).toLowerCase() === difficultyFilter;
     const matchesPath = activePathLessonIds.size === 0 || activePathLessonIds.has(String(lesson.id));
 
     return matchesSearch && matchesSubject && matchesDifficulty && matchesPath;

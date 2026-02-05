@@ -25,6 +25,9 @@ def _env_bool(name: str, default: bool) -> bool:
 def _normalize_database_url(url: str | None) -> str | None:
     if not url:
         return None
+    url = url.strip()
+    if not url:
+        return None
     if url.startswith("postgres://"):
         return url.replace("postgres://", "postgresql://", 1)
     return url

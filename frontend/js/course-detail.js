@@ -4,6 +4,148 @@ let currentLesson = null;
 let currentQuiz = [];
 let currentProject = null;
 
+const safeText = (value) => {
+  if (value === null || value === undefined) return '';
+  return String(value);
+};
+
+const stripMarkdown = (text) => {
+  return safeText(text)
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+    .replace(/[#>*_~]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const normalizeList = (value) => {
+  if (Array.isArray(value)) {
+    return value.map(item => safeText(item)).filter(Boolean);
+  }
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) return [];
+
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (Array.isArray(parsed)) {
+        return parsed.map(item => safeText(item)).filter(Boolean);
+      }
+    } catch (err) {
+      // fall back to manual parsing
+    }
+
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      const inner = trimmed.slice(1, -1);
+      return inner
+        .split(',')
+        .map(item => item.replace(/^['"\s]+|['"\s]+$/g, ''))
+        .filter(Boolean);
+    }
+
+    return trimmed
+      .split(/[\r\n]+|\u2022|\u00b7|-\s+/)
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const normalizeSteps = (stepsValue) => {
+  if (Array.isArray(stepsValue)) {
+    return stepsValue.map(step => {
+      if (typeof step === 'string') return step;
+      if (step && typeof step === 'object') {
+        return step.title || step.text || step.step || '';
+      }
+      return safeText(step);
+    }).filter(Boolean);
+  }
+  return normalizeList(stepsValue);
+};
+
+const sanitizeItem = (item) => {
+  return safeText(item)
+    .replace(/^[\s\-*\d.)]+/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const buildFallbackHighlights = (lesson) => {
+  const subject = lesson.subject || 'this topic';
+  const level = safeText(lesson.difficulty).toLowerCase();
+  const levelLabel = level === 'beginner'
+    ? 'foundational'
+    : level === 'advanced'
+      ? 'advanced'
+      : 'core';
+
+  return [
+    `Build ${levelLabel} ${subject} skills with guided practice.`,
+    'Learn concepts through short explanations and examples.',
+    'Reinforce learning with quick checks and recap notes.'
+  ];
+};
+
+const getLessonHighlights = (lesson) => {
+  const infoItems = normalizeList(lesson.information);
+  const stepItems = normalizeSteps(lesson.steps);
+  const merged = [...infoItems, ...stepItems].map(sanitizeItem).filter(Boolean);
+  const unique = Array.from(new Set(merged));
+
+  const fallback = buildFallbackHighlights(lesson);
+  while (unique.length < 3) {
+    unique.push(fallback[unique.length % fallback.length]);
+  }
+  return unique.slice(0, 3);
+};
+
+const buildLessonSummary = (lesson) => {
+  const description = safeText(lesson.description).trim();
+  if (description) return description;
+
+  const infoItems = normalizeList(lesson.information);
+  if (infoItems.length) return infoItems[0];
+
+  const steps = normalizeSteps(lesson.steps);
+  if (steps.length) return steps[0];
+
+  const contentText = stripMarkdown(lesson.content);
+  if (contentText) return contentText.length > 160 ? `${contentText.slice(0, 157)}...` : contentText;
+
+  return 'Build confidence with guided lessons, practice, and quick reviews.';
+};
+
+const getLessonStats = (lesson) => {
+  const stepsCount = normalizeSteps(lesson.steps).length;
+  const quizCount = Array.isArray(lesson.quiz)
+    ? lesson.quiz.length
+    : normalizeList(lesson.quiz).length;
+
+  const durationMinutes = Number(lesson.duration_minutes);
+  const durationLabel = Number.isFinite(durationMinutes) && durationMinutes > 0
+    ? `${durationMinutes} min`
+    : 'Self-paced';
+
+  const minAge = lesson.min_age;
+  const maxAge = lesson.max_age;
+  const ageLabel = minAge && maxAge
+    ? `${minAge}-${maxAge}`
+    : minAge
+      ? `${minAge}+`
+      : 'All ages';
+
+  return {
+    stepsCount,
+    quizCount,
+    durationLabel,
+    ageLabel
+  };
+};
+
 async function loadCourseDetail() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -42,33 +184,58 @@ async function loadCourseDetail() {
 
     const statusText = isCompleted ? 'Completed' : 'Not completed';
     const statusClass = isCompleted ? 'complete' : 'locked';
+    const summary = buildLessonSummary(lesson);
+    const highlights = getLessonHighlights(lesson);
+    const stats = getLessonStats(lesson);
+    const subjectLabel = lesson.subject || 'General';
+    const difficultyLabel = safeText(lesson.difficulty).toLowerCase() || 'intermediate';
+    const difficultyDisplay = difficultyLabel.charAt(0).toUpperCase() + difficultyLabel.slice(1);
+    const stepsLabel = stats.stepsCount ? `${stats.stepsCount} steps` : 'Flexible';
+    const quizLabel = stats.quizCount ? `${stats.quizCount} questions` : 'No quiz';
+
+    const statItems = [
+      { label: 'Duration', value: stats.durationLabel },
+      { label: 'Steps', value: stepsLabel },
+      { label: 'Quiz', value: quizLabel },
+      { label: 'Ages', value: stats.ageLabel },
+      { label: 'Subject', value: subjectLabel }
+    ];
+
+    const statsHtml = statItems
+      .map(item => `<div class="course-stat"><span>${item.label}</span><strong>${item.value}</strong></div>`)
+      .join('');
 
     document.getElementById('courseHeader').innerHTML = `
-      <div style="background: linear-gradient(135deg, ${diffColor}15 0%, ${diffColor}05 100%); padding: 2rem; border-radius: 12px; border: 2px solid ${diffColor};">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; gap: 1.5rem; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 260px;">
-            <span style="background: ${diffColor}; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; text-transform: capitalize; display: inline-block; margin-bottom: 1rem;">${lesson.difficulty}</span>
-            <h1 style="margin: 0; color: var(--text-primary); font-size: 2.5rem;">${lesson.title}</h1>
-            <p style="margin: 0.75rem 0 0 0; color: var(--text-secondary); font-size: 1.1rem;">${lesson.description}</p>
-            <div style="margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+      <section class="course-hero" style="background: linear-gradient(135deg, ${diffColor}15 0%, ${diffColor}05 100%); border: 2px solid ${diffColor};">
+        <div class="course-hero-head">
+          <div class="course-hero-main">
+            <span style="background: ${diffColor}; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; text-transform: capitalize; display: inline-block; margin-bottom: 1rem;">${difficultyDisplay}</span>
+            <h1 class="course-hero-title">${lesson.title}</h1>
+            <p class="course-hero-summary">${summary}</p>
+            <div class="course-hero-badges">
               <span id="courseStatusChip" class="status-chip ${statusClass}">${statusText}</span>
               <span id="courseMasteryChip" class="status-chip in-progress">Mastery ${masteryScore}%</span>
             </div>
           </div>
-          <div style="text-align: right; min-width: 160px;">
-            <p style="margin: 0; color: var(--text-secondary); font-size: 1rem;">Time: ${lesson.duration_minutes} minutes</p>
-            <p style="margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Subject: ${lesson.subject}</p>
+          <div class="course-hero-stats">
+            ${statsHtml}
           </div>
         </div>
-      </div>
+        <div class="course-hero-learn">
+          <div class="course-learn-title">What you'll learn</div>
+          <ul class="course-learn-list">
+            ${highlights.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+      </section>
     `;
 
     let contentHtml = '';
 
     contentHtml += `
       <div style="grid-column: 1/-1;">
-        <h2 style="color: var(--text-primary); margin-bottom: 1.5rem; font-size: 1.8rem;">Lesson Video</h2>
-        <div style="background: var(--bg-secondary); border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
+        <h2 style="color: var(--text-primary); margin-bottom: var(--space-lg); font-size: clamp(1.3rem, 3vw, 1.8rem);">Lesson Video</h2>
+        <div style="background: var(--bg-secondary); border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
           ${lesson.video_url ? `
             <iframe
               width="100%"
@@ -109,7 +276,7 @@ async function loadCourseDetail() {
         .join('');
 
       contentHtml += `
-        <div style="grid-column: 1/-1; background: var(--bg-secondary); padding: 2rem; border-radius: 12px; border-left: 5px solid ${diffColor}; font-size: 1.05rem; line-height: 1.8;">
+        <div style="grid-column: 1/-1; background: var(--bg-secondary); padding: var(--space-2xl); border-radius: var(--radius-xl); border-left: 5px solid ${diffColor}; font-size: clamp(0.95rem, 2vw, 1.05rem); line-height: 1.8;">
           <div style="color: var(--text-primary);">
             ${processedContent}
           </div>
@@ -133,8 +300,8 @@ async function loadCourseDetail() {
       }
 
       contentHtml += `
-        <div style="grid-column: 1/-1; background: var(--bg-secondary); padding: 2rem; border-radius: 12px; border-left: 5px solid ${diffColor};">
-          <h2 style="color: var(--text-primary); margin-top: 0; margin-bottom: 1rem; font-size: 1.5rem;">Key Information</h2>
+        <div style="grid-column: 1/-1; background: var(--bg-secondary); padding: var(--space-2xl); border-radius: var(--radius-xl); border-left: 5px solid ${diffColor};">
+          <h2 style="color: var(--text-primary); margin-top: 0; margin-bottom: 1rem; font-size: clamp(1.2rem, 2.6vw, 1.5rem);">Key Information</h2>
           <div style="color: var(--text-secondary);">
             ${infoHtml}
           </div>
@@ -154,15 +321,15 @@ async function loadCourseDetail() {
     if (stepsData && stepsData.length > 0) {
       contentHtml += `
         <div style="grid-column: 1/-1;">
-          <h2 style="color: var(--text-primary); margin-bottom: 1.5rem; font-size: 1.8rem;">Learning Steps</h2>
+          <h2 style="color: var(--text-primary); margin-bottom: var(--space-lg); font-size: clamp(1.3rem, 3vw, 1.8rem);">Learning Steps</h2>
           <div style="display: grid; gap: 1rem;">
       `;
 
       stepsData.forEach((step, idx) => {
         contentHtml += `
-          <div style="display: flex; gap: 1.5rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; align-items: flex-start; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-            <div style="background: ${diffColor}; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; flex-shrink: 0;">${idx + 1}</div>
-            <p style="color: var(--text-primary); margin: 0; line-height: 1.7; font-size: 1.05rem;">${step}</p>
+          <div style="display: flex; gap: 1rem; padding: var(--space-lg); background: var(--bg-secondary); border-radius: var(--radius-lg); align-items: flex-start; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="background: ${diffColor}; color: white; width: clamp(32px, 6vw, 40px); height: clamp(32px, 6vw, 40px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: clamp(0.9rem, 2.5vw, 1.1rem); flex-shrink: 0;">${idx + 1}</div>
+            <p style="color: var(--text-primary); margin: 0; line-height: 1.7; font-size: clamp(0.95rem, 2.2vw, 1.05rem);">${step}</p>
           </div>
         `;
       });
@@ -186,15 +353,15 @@ async function loadCourseDetail() {
 
     if (currentQuiz.length > 0) {
       contentHtml += `
-        <div style="grid-column: 1/-1; background: var(--primary-light); padding: 2rem; border-radius: 12px;">
-          <h2 style="color: var(--text-primary); margin-top: 0; margin-bottom: 2rem; font-size: 1.8rem;">Knowledge Check Quiz</h2>
+        <div style="grid-column: 1/-1; background: var(--primary-light); padding: var(--space-2xl); border-radius: var(--radius-xl);">
+          <h2 style="color: var(--text-primary); margin-top: 0; margin-bottom: var(--space-xl); font-size: clamp(1.3rem, 3vw, 1.8rem);">Knowledge Check Quiz</h2>
           <div id="quizContainer" style="display: flex; flex-direction: column; gap: 2rem;">
       `;
 
       currentQuiz.forEach((q, idx) => {
         contentHtml += `
-          <div data-quiz-question="${idx}" style="background: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border-left: 4px solid ${diffColor};">
-            <p style="color: var(--text-primary); font-weight: 700; margin: 0 0 1.25rem 0; font-size: 1.1rem;">Q${idx + 1}: ${q.question}</p>
+          <div data-quiz-question="${idx}" style="background: var(--bg-primary); padding: var(--space-lg); border-radius: var(--radius-lg); border-left: 4px solid ${diffColor};">
+            <p style="color: var(--text-primary); font-weight: 700; margin: 0 0 1.25rem 0; font-size: clamp(1rem, 2.4vw, 1.1rem);">Q${idx + 1}: ${q.question}</p>
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
         `;
 
@@ -215,7 +382,7 @@ async function loadCourseDetail() {
 
       contentHtml += `
           </div>
-          <button id="quizCheckBtn" style="width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 2rem; font-size: 1.05rem;">Check Answers</button>
+          <button id="quizCheckBtn" style="width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; border-radius: var(--radius-lg); font-weight: 700; cursor: pointer; margin-top: var(--space-xl); font-size: var(--text-base);">Check Answers</button>
           <div id="quizResult" class="quiz-result" style="display: none;"></div>
         </div>
       `;

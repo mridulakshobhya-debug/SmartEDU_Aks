@@ -71,12 +71,111 @@ class ThemeManager {
 }
 
 /**
+ * Display mode management (mobile / tablet / monitor)
+ */
+class DisplayModeManager {
+  constructor() {
+    this.modes = ['mobile', 'tablet', 'monitor'];
+    this.currentMode = null;
+    this.applyAutoMode();
+    this.onResize = this.debounce(() => this.applyAutoMode(), 150);
+    window.addEventListener('resize', this.onResize);
+  }
+
+  getAutoMode() {
+    const width = window.innerWidth || document.documentElement.clientWidth || 1024;
+    if (width <= 640) return 'mobile';
+    if (width <= 1024) return 'tablet';
+    return 'monitor';
+  }
+
+  applyAutoMode() {
+    const nextMode = this.getAutoMode();
+    if (nextMode !== this.currentMode) {
+      this.currentMode = nextMode;
+      this.applyMode(nextMode);
+    }
+  }
+
+  applyMode(mode) {
+    if (mode && this.modes.includes(mode)) {
+      document.documentElement.setAttribute('data-display', mode);
+      if (document.body) {
+        document.body.setAttribute('data-display', mode);
+      }
+    } else {
+      document.documentElement.removeAttribute('data-display');
+      if (document.body) {
+        document.body.removeAttribute('data-display');
+      }
+    }
+  }
+
+  setMode(mode) {
+    this.applyAutoMode();
+  }
+
+  debounce(fn, wait) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+}
+
+/**
  * Global toggle function (for inline onclick handlers)
  */
 function toggleTheme() {
   if (window.themeManager) {
     window.themeManager.toggleTheme();
   }
+}
+
+function setDisplayMode() {
+  if (window.displayModeManager) {
+    window.displayModeManager.applyAutoMode();
+  }
+}
+
+function updateDisplayUrl(mode) {
+  if (!mode) return;
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('display', mode);
+    history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+  } catch (error) {
+    // ignore URL rewrite issues
+  }
+}
+
+function updateDisplayLinks(mode) {
+  if (!mode) return;
+  const links = document.querySelectorAll('a[href]');
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    const lower = href.toLowerCase();
+    if (lower.startsWith('#') || lower.startsWith('mailto:') || lower.startsWith('tel:') || lower.startsWith('javascript:')) {
+      return;
+    }
+    if (lower.startsWith('http://') || lower.startsWith('https://') || lower.startsWith('//')) {
+      return;
+    }
+
+    const hashSplit = href.split('#');
+    const base = hashSplit[0];
+    const hash = hashSplit.length > 1 ? `#${hashSplit.slice(1).join('#')}` : '';
+    const querySplit = base.split('?');
+    const path = querySplit[0];
+    const queryString = querySplit.length > 1 ? querySplit.slice(1).join('?') : '';
+
+    const params = new URLSearchParams(queryString);
+    params.set('display', mode);
+    const next = `${path}?${params.toString()}${hash}`;
+    link.setAttribute('href', next);
+  });
 }
 
 /**
@@ -210,6 +309,56 @@ function initMobileNav() {
 
   window.addEventListener('resize', () => {
     if (window.innerWidth > 768) closeAll();
+  });
+}
+
+/**
+ * Inject display mode link into nav
+ */
+function initDisplayModeNav() {
+  const headers = document.querySelectorAll('header');
+  if (!headers.length) return;
+
+  headers.forEach(header => {
+    header.querySelectorAll('nav a[href="display-mode.html"]').forEach(link => link.remove());
+    const action = header.querySelector('.display-mode-button');
+    if (action) action.remove();
+  });
+}
+
+/**
+ * Display mode page interactions
+ */
+function initDisplayModePage() {
+  const page = document.querySelector('[data-display-page]');
+  if (!page) return;
+
+  const cards = page.querySelectorAll('[data-display-select]');
+  const status = page.querySelector('[data-display-status]');
+  const current = document.documentElement.getAttribute('data-display')
+    || (window.displayModeManager && window.displayModeManager.currentMode)
+    || (typeof localStorage !== 'undefined' ? localStorage.getItem('smartedu_display') : null)
+    || 'monitor';
+
+  const updateActive = (mode) => {
+    cards.forEach(card => {
+      card.classList.toggle('active', card.dataset.displaySelect === mode);
+    });
+    if (status) {
+      status.textContent = `Current selection: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`;
+    }
+  };
+
+  updateActive(current);
+
+  cards.forEach(card => {
+    const mode = card.dataset.displaySelect;
+    card.querySelectorAll('[data-display-button]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setDisplayMode(mode);
+        updateActive(mode);
+      });
+    });
   });
 }
 
@@ -371,7 +520,17 @@ function initAuthNav() {
   if (!navs.length) return;
 
   navs.forEach(nav => {
-    let login = nav.querySelector('a[href="login.html"]');
+    const findAuthLink = (target) => {
+      const links = Array.from(nav.querySelectorAll('a[href]'));
+      return links.find(link => {
+        const href = link.getAttribute('href');
+        if (!href) return false;
+        const base = href.split('#')[0].split('?')[0];
+        return base.endsWith(target);
+      }) || null;
+    };
+
+    let login = findAuthLink('login.html');
     if (!login) {
       login = document.createElement('a');
       login.href = 'login.html';
@@ -381,7 +540,7 @@ function initAuthNav() {
     login.dataset.auth = 'login';
     login.classList.add('auth-link', 'auth-login');
 
-    let signup = nav.querySelector('a[href="signup.html"]');
+    let signup = findAuthLink('signup.html');
     if (!signup) {
       signup = document.createElement('a');
       signup.href = 'signup.html';
@@ -438,6 +597,9 @@ function updateAuthNav() {
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize theme manager
   window.themeManager = new ThemeManager();
+
+  // Initialize display mode manager
+  window.displayModeManager = new DisplayModeManager();
   
   // Initialize scroll animator
   new ScrollAnimator();
@@ -447,6 +609,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Mobile nav menu
   initMobileNav();
+
+  // Display mode nav link
+  initDisplayModeNav();
+
+  // Display mode page
+  initDisplayModePage();
 
   // Initialize gallery slider
   initGallerySlider();

@@ -11,7 +11,17 @@ function initAdminAuthNav() {
   const nav = document.querySelector('header nav');
   if (!nav) return;
 
-  let login = nav.querySelector('a[href="login.html"]');
+  const findAuthLink = (target) => {
+    const links = Array.from(nav.querySelectorAll('a[href]'));
+    return links.find(link => {
+      const href = link.getAttribute('href');
+      if (!href) return false;
+      const base = href.split('#')[0].split('?')[0];
+      return base.endsWith(target);
+    }) || null;
+  };
+
+  let login = findAuthLink('login.html');
   if (!login) {
     login = document.createElement('a');
     login.href = 'login.html';
@@ -21,7 +31,7 @@ function initAdminAuthNav() {
   login.dataset.auth = 'login';
   login.classList.add('auth-link', 'auth-login');
 
-  let signup = nav.querySelector('a[href="signup.html"]');
+  let signup = findAuthLink('signup.html');
   if (!signup) {
     signup = document.createElement('a');
     signup.href = 'signup.html';

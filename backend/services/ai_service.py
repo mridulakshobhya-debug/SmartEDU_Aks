@@ -2,6 +2,7 @@ import os
 import sys
 import requests
 import logging
+import re
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -20,6 +21,90 @@ except ImportError:
     PdfReader = None
 
 logger = logging.getLogger(__name__)
+
+MAX_WORKSHEET_QUESTIONS = 70
+
+
+def _normalize_num_questions(num_questions, max_questions=MAX_WORKSHEET_QUESTIONS):
+    try:
+        value = int(num_questions)
+    except (TypeError, ValueError):
+        value = 10
+    return max(1, min(value, max_questions))
+
+
+def _worksheet_max_tokens(num_questions):
+    base = 900
+    per_question = 70
+    return min(4096, base + (num_questions * per_question))
+
+
+def _question_templates():
+    return {
+        "Beginner": [
+            "What is the basic definition of {topic_or_subject}?",
+            "Explain one key concept of {topic_or_subject}.",
+            "Describe the importance of {topic_or_subject} in real life.",
+        ],
+        "Intermediate": [
+            "Analyze the relationship between two concepts in {topic_or_subject}.",
+            "Apply your knowledge of {topic_or_subject} to solve a real-world problem.",
+            "Compare and contrast two aspects of {topic_or_subject}.",
+        ],
+        "Advanced": [
+            "Critically evaluate the implications of {topic_or_subject}.",
+            "Synthesize information from multiple sources about {topic_or_subject}.",
+            "Propose a solution to a complex problem involving {topic_or_subject}.",
+        ],
+    }
+
+
+def _render_question_blocks(subject, difficulty, num_questions, topic, start_index=1):
+    templates = _question_templates().get(difficulty, _question_templates()["Intermediate"])
+    topic_text = topic or subject
+    blocks = []
+
+    for offset in range(num_questions):
+        question_number = start_index + offset
+        template = templates[(question_number - 1) % len(templates)]
+        question = template.format(topic_or_subject=topic_text)
+        blocks.append(
+            f"""
+    <div class="question" style="margin-bottom: 2rem;">
+        <p><strong>Question {question_number}:</strong> {question}</p>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Answer: ________________________________________________________________</p>
+    </div>
+"""
+        )
+
+    return "".join(blocks)
+
+
+def _count_question_divs(html):
+    if not html:
+        return 0
+    return len(
+        re.findall(
+            r'<div\\s+[^>]*class=["\\\'][^"\\\']*\\bquestion\\b[^"\\\']*["\\\']',
+            html,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def _ensure_question_count(html, subject, difficulty, num_questions, question_type, topic):
+    current_count = _count_question_divs(html)
+    if current_count >= num_questions:
+        return html
+    missing = num_questions - current_count
+    extra = _render_question_blocks(
+        subject=subject,
+        difficulty=difficulty,
+        num_questions=missing,
+        topic=topic,
+        start_index=current_count + 1,
+    )
+    return f"{html}\n{extra}"
 
 
 def create_table_html(headers, rows, title="Results"):
@@ -259,6 +344,7 @@ def generate_worksheet(subject, difficulty, num_questions=10, question_type="Mix
     from config import Config
     
     api_key = Config.GROQ_API_KEY
+    num_questions = _normalize_num_questions(num_questions)
     
     # If no API key, return error message
     if not api_key or api_key == "your_groq_api_key_here" or api_key == "gsk_YOUR_GROQ_API_KEY_HERE":
@@ -268,13 +354,15 @@ def generate_worksheet(subject, difficulty, num_questions=10, question_type="Mix
     try:
         # Build the prompt for worksheet generation
         topic_str = f" about {topic}" if topic else ""
-        prompt = f"""Generate a comprehensive {difficulty} level {subject} worksheet{topic_str} with {num_questions} {question_type} questions.
+        prompt = f"""Generate a comprehensive {difficulty} level {subject} worksheet{topic_str} with exactly {num_questions} {question_type} questions.
 
 Format the output as HTML with the following structure:
 - Use <div class="question"> for each question
 - Use <h3> for section headers
 - Include answer space/lines for students
 - Make it visually organized and printable
+- Output ONLY the worksheet HTML (no markdown fences, no commentary)
+- Ensure there are exactly {num_questions} <div class="question"> blocks
 
 Requirements:
 - Difficulty: {difficulty} (Beginner=basic concepts, Intermediate=applied knowledge, Advanced=critical thinking)
@@ -302,8 +390,8 @@ Generate the worksheet now:"""
                     },
                     {"role": "user", "content": prompt}
                 ],
-                "temperature": 0.7,
-                "max_tokens": 2048
+                "temperature": 0.6,
+                "max_tokens": _worksheet_max_tokens(num_questions)
             },
             timeout=30
         )
@@ -313,6 +401,14 @@ Generate the worksheet now:"""
             worksheet_html = result.get("choices", [{}])[0].get("message", {}).get("content", "")
             
             if worksheet_html:
+                worksheet_html = _ensure_question_count(
+                    worksheet_html,
+                    subject=subject,
+                    difficulty=difficulty,
+                    num_questions=num_questions,
+                    question_type=question_type,
+                    topic=topic,
+                )
                 # Wrap in a div with styling
                 return f"""<div class="worksheet">
                 {worksheet_html}
